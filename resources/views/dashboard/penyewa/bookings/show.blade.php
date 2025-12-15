@@ -60,16 +60,25 @@
                                         <th width="30%">Status</th>
                                         <td>
                                             @php
-                                                $badgeClass = match($booking->status) {
-                                                    'pending_payment' => 'bg-warning',
-                                                    'confirmed' => 'bg-info',
-                                                    'ongoing' => 'bg-primary',
-                                                    'completed' => 'bg-success',
-                                                    'cancelled' => 'bg-danger',
-                                                    default => 'bg-secondary'
+                                                $statusConfig = match($booking->status) {
+                                                    'pending_payment' => ['class' => 'bg-warning', 'label' => 'Menunggu Pembayaran'],
+                                                    'dp_50' => ['class' => 'bg-info', 'label' => 'DP 50% Lunas'],
+                                                    'confirmed' => ['class' => 'bg-success', 'label' => 'Lunas / Terkonfirmasi'],
+                                                    'ongoing' => ['class' => 'bg-primary', 'label' => 'Sedang Rental'],
+                                                    'completed' => ['class' => 'bg-success', 'label' => 'Selesai'],
+                                                    'cancelled' => ['class' => 'bg-danger', 'label' => 'Dibatalkan'],
+                                                    'penalty_pending' => ['class' => 'bg-danger', 'label' => 'Menunggu Pembayaran Denda'],
+                                                    'penalty_paid' => ['class' => 'bg-success', 'label' => 'Denda Lunas'],
+                                                    default => ['class' => 'bg-secondary', 'label' => ucfirst(str_replace('_', ' ', $booking->status))]
                                                 };
+
+                                                // Override if there is a pending payment upload
+                                                // Override if there is a pending payment upload AND booking isn't already confirmed/processed
+                                                if ($booking->payments->contains('status', 'pending') && !in_array($booking->status, ['confirmed', 'ongoing', 'completed', 'cancelled', 'penalty_paid'])) {
+                                                    $statusConfig = ['class' => 'bg-info', 'label' => 'Menunggu Verifikasi'];
+                                                }
                                             @endphp
-                                            <span class="badge {{ $badgeClass }} text-white">{{ ucfirst(str_replace('_', ' ', $booking->status)) }}</span>
+                                            <span class="badge {{ $statusConfig['class'] }} text-white">{{ $statusConfig['label'] }}</span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -112,6 +121,16 @@
                                                 <span>- Rp {{ number_format($booking->voucher_discount, 0, ',', '.') }}</span>
                                             </div>
                                             @endif
+                                            
+                                            <!-- Already Paid Section -->
+                                            @php
+                                                $amountPaid = $booking->payments->where('status', 'verified')->sum('amount');
+                                            @endphp
+                                            <div class="d-flex justify-content-between mb-2 text-primary">
+                                                <span>Already Paid</span>
+                                                <span>Rp {{ number_format($amountPaid, 0, ',', '.') }}</span>
+                                            </div>
+
                                             <div class="d-flex justify-content-between border-top pt-2 mt-2">
                                                 <strong>Total Price</strong>
                                                 <strong class="text-primary fs-4">IDR {{ number_format($booking->total_price, 0, ',', '.') }}</strong>
@@ -121,12 +140,135 @@
                                 </table>
                             </div>
 
-                            @if($booking->status === 'pending_payment')
-                                <div class="alert alert-warning mt-3">
-                                    <i class="ti ti-info-circle me-2"></i> 
-                                    Please proceed with payment to confirm your booking.
+                            @php
+                                $totalPaid = $booking->payments->where('status', 'verified')->where('type', '!=', 'penalty_payment')->sum('amount');
+                                $isFullyPaid = $totalPaid >= $booking->total_price;
+                                $balanceDue = $booking->total_price - $totalPaid;
+                                $hasPenalty = $booking->total_penalty > 0 && $booking->penalty_status != 'paid';
+                            @endphp
+
+                            <!-- Payment Information & Uploads -->
+                            @if(!in_array($booking->status, ['cancelled']) && (!$isFullyPaid || $hasPenalty))
+                                <div class="card mt-4 border">
+                                    <div class="card-header bg-light">
+                                        <h6 class="mb-0">Payment Information</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <!-- Bank Accounts -->
+                                        @if(!$isFullyPaid || $hasPenalty)
+                                        <div class="mb-4">
+                                            <p class="mb-3">Please transfer the payment to one of the following bank accounts:</p>
+                                            <div class="row">
+                                                @foreach($bankAccounts as $account)
+                                                <div class="col-md-6 mb-3">
+                                                    <div class="p-3 border rounded bg-white">
+                                                        <div class="d-flex align-items-center mb-2">
+                                                            <i class="ti ti-building-bank fs-4 me-2 text-primary"></i>
+                                                            <h6 class="mb-0">{{ $account->bank_name }}</h6>
+                                                        </div>
+                                                        <p class="mb-1 text-muted small">Account Number</p>
+                                                        <h5 class="mb-1 copy-text" role="button" onclick="navigator.clipboard.writeText('{{ $account->account_number }}'); alert('Copied!');" title="Click to copy">
+                                                            {{ $account->account_number }} <i class="ti ti-copy fs-6 ms-1 text-muted"></i>
+                                                        </h5>
+                                                        <p class="mb-0 text-muted small">A.N {{ $account->account_holder }}</p>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                        @endif
+
+                                        <!-- 1. Initial Payment (DP or Full) -->
+                                        @if($booking->status == 'pending_payment')
+                                            <div class="alert alert-info">
+                                                <i class="ti ti-info-circle me-2"></i> 
+                                                @if($booking->payment_type == 'down_payment')
+                                                    <strong>Down Payment (50%) Required.</strong> Amount: Rp {{ number_format($booking->total_price * 0.5, 0, ',', '.') }}
+                                                @else
+                                                    <strong>Full Payment Required.</strong> Amount: Rp {{ number_format($booking->total_price, 0, ',', '.') }}
+                                                @endif
+                                            </div>
+                                            <form action="{{ route('bookings.upload-payment', $booking->id) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" name="payment_type" value="{{ $booking->payment_type }}">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Upload Payment Proof</label>
+                                                    <input type="file" name="payment_proof" class="form-control" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary w-100">Upload Payment</button>
+                                            </form>
+                                        
+                                        <!-- 2. Repayment (Pelunasan) -->
+                                        @elseif(($booking->status == 'dp_50' || $booking->status == 'confirmed') && !$isFullyPaid)
+                                            <div class="alert alert-warning">
+                                                <i class="ti ti-alert-circle me-2"></i> 
+                                                <strong>Repayment Required.</strong> Remaining Balance: Rp {{ number_format($balanceDue, 0, ',', '.') }}
+                                            </div>
+                                            <form action="{{ route('bookings.upload-payment', $booking->id) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" name="payment_type" value="repayment">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Upload Repayment Proof</label>
+                                                    <input type="file" name="payment_proof" class="form-control" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-warning w-100">Upload Repayment</button>
+                                            </form>
+
+                                        <!-- 3. Penalty Payment -->
+                                        @elseif($hasPenalty)
+                                            <div class="alert alert-danger">
+                                                <i class="ti ti-exclamation-circle me-2"></i> 
+                                                <strong>Penalty Payment Required.</strong> Amount: Rp {{ number_format($booking->total_penalty, 0, ',', '.') }}
+                                            </div>
+                                            <form action="{{ route('bookings.upload-payment', $booking->id) }}" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" name="payment_type" value="penalty_payment">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Upload Penalty Proof</label>
+                                                    <input type="file" name="payment_proof" class="form-control" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-danger w-100">Upload Penalty Payment</button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </div>
-                                <button class="btn btn-primary w-100 mt-2">Proceed to Payment (Wait for implementation)</button>
+                            @endif
+
+                            <!-- Payment History -->
+                            @if($booking->payments->count() > 0)
+                            <div class="card mt-4">
+                                <div class="card-header">
+                                    <h6 class="mb-0">Payment History</h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Type</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th>Note</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($booking->payments as $payment)
+                                            <tr>
+                                                <td>{{ $payment->created_at->format('d M Y H:i') }}</td>
+                                                <td>{{ ucfirst(str_replace('_', ' ', $payment->type)) }}</td>
+                                                <td>Rp {{ number_format($payment->amount, 0, ',', '.') }}</td>
+                                                <td>
+                                                    <span class="badge {{ $payment->status == 'verified' ? 'bg-success' : ($payment->status == 'rejected' ? 'bg-danger' : 'bg-warning') }}">
+                                                        {{ $payment->status == 'pending' ? 'Menunggu Verifikasi' : ($payment->status == 'verified' ? 'Terverifikasi' : 'Ditolak') }}
+                                                    </span>
+                                                </td>
+                                                <td>{{ $payment->note ?? '-' }}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             @endif
 
                         </div>

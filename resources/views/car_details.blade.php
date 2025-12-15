@@ -419,12 +419,11 @@
                                         <!-- Voucher Code -->
                                         <div class="input-block mb-3">
                                             <label>Voucher Code</label>
-                                            <div class="group-img">
-                                                <div class="form-wrap">
-                                                    <input type="text" name="voucher_code" class="form-control" placeholder="Enter voucher code (optional)">
-                                                    <span class="form-icon"><i class="fa-solid fa-ticket"></i></span>
-                                                </div>
+                                            <div class="input-group">
+                                                <input type="text" id="voucher_code" name="voucher_code" class="form-control" placeholder="Enter voucher code (optional)">
+                                                <button type="button" class="btn btn-secondary" id="check-voucher-btn">Check</button>
                                             </div>
+                                            <small id="voucher-message" class="text-danger"></small>
                                         </div>
 
                                         <!-- Payment Type -->
@@ -570,6 +569,95 @@
             </div>
         </div>
     </section>
+
+@push('scripts')
+<script>
+    $(document).ready(function() {
+        const checkBtn = $('#check-voucher-btn');
+        const voucherInput = $('#voucher_code');
+        const messageSpan = $('#voucher-message');
+        const bookBtn = $('button[type="submit"]'); // Assuming the submit button is the only one or identifiable
+        
+        // Disable book button initially if voucher has value but not verified? 
+        // Logic: specific request "kalau tidak valid tombol book now itu disable". 
+        // Implies: if input is empty -> enabled (optional). If input has text -> disabled until verified valid.
+
+        function validateVoucherState() {
+            if (voucherInput.val().trim() !== '' && !voucherInput.data('valid')) {
+                bookBtn.prop('disabled', true);
+            } else {
+                bookBtn.prop('disabled', false);
+            }
+        }
+
+        voucherInput.on('input', function() {
+            $(this).data('valid', false);
+            messageSpan.text('');
+            validateVoucherState();
+        });
+
+        checkBtn.on('click', function() {
+            const code = voucherInput.val().trim();
+            if (!code) return;
+
+            // Calculate estimated price for validation
+            // We need start_date, end_date, start_time, end_time
+            const startDate = $('input[name="start_date"]').val();
+            const endDate = $('input[name="end_date"]').val();
+            const startTime = $('input[name="start_time"]').val();
+            const endTime = $('input[name="end_time"]').val();
+
+            if (!startDate || !endDate || !startTime || !endTime) {
+                messageSpan.text('Please select dates and times first.').removeClass('text-success').addClass('text-danger');
+                return;
+            }
+
+            const start = new Date(startDate + 'T' + startTime);
+            const end = new Date(endDate + 'T' + endTime);
+            const diffTime = Math.abs(end - start);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            
+            // Base Logic from Controller (Simplified)
+            // Note: PHP uses Carbon diffInHours / 24 ceil. JS should match.
+            // But getting exact rate from PHP variable requires blade echo.
+            const ratePerDay = {{ $car->rental_rate_per_day }};
+            const driverFee = {{ $car->driver_fee_in_city ?? 150000 }};
+            const useDriver = $('input[name="use_driver"]').is(':checked');
+
+            let total = ratePerDay * diffDays;
+            if (useDriver) {
+                total += driverFee * diffDays;
+            }
+
+            $.ajax({
+                url: "{{ route('vouchers.check') }}",
+                method: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    voucher_code: code,
+                    car_id: "{{ $car->id }}",
+                    total_price: total
+                },
+                success: function(response) {
+                    if (response.valid) {
+                        messageSpan.text(response.message).removeClass('text-danger').addClass('text-success');
+                        voucherInput.data('valid', true);
+                    } else {
+                        messageSpan.text(response.message).removeClass('text-success').addClass('text-danger');
+                        voucherInput.data('valid', false);
+                    }
+                    validateVoucherState();
+                },
+                error: function() {
+                    messageSpan.text('Error verifying voucher.').removeClass('text-success').addClass('text-danger');
+                    voucherInput.data('valid', false);
+                    validateVoucherState();
+                }
+            });
+        });
+    });
+</script>
+@endpush
 @endsection
 
 @push('scripts')

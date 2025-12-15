@@ -122,8 +122,49 @@ class BookingController extends Controller
             'voucher_code' => $voucherCode,
             'voucher_discount' => $voucherDiscount,
             'status' => 'pending_payment',
+            'payment_type' => $request->payment_type,
         ]);
 
         return redirect()->route('my-bookings.show', $booking->id)->with('success', 'Booking created successfully! Please proceed to payment.');
+    }
+    public function uploadPayment(Request $request, Booking $booking)
+    {
+        // Ensure user owns the booking
+        if ($booking->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $request->validate([
+            'payment_proof' => 'required|image|max:2048',
+            // payment_type can be passed from form
+            'payment_type' => 'required|in:down_payment,full_payment,repayment,penalty_payment',
+        ]);
+
+        $path = $request->file('payment_proof')->store('payments', 'public');
+        
+        // Determine amount based on type
+        $amount = 0;
+        if ($request->payment_type == 'full_payment') {
+            $amount = $booking->total_price;
+        } elseif ($request->payment_type == 'down_payment') {
+            $amount = $booking->total_price * 0.5;
+            // Check if there's already a verified DP? No need, this is upload.
+        } elseif ($request->payment_type == 'repayment') {
+            // Amount is remaining balance
+             $totalPaid = $booking->payments()->where('status', 'verified')->where('type', '!=', 'penalty_payment')->sum('amount');
+             $amount = $booking->total_price - $totalPaid;
+        } elseif ($request->payment_type == 'penalty_payment') {
+             $amount = $booking->total_penalty; // Simple full penalty payment
+        }
+
+        $booking->payments()->create([
+            'amount' => $amount,
+            'type' => $request->payment_type,
+            'proof_file_path' => 'storage/' . $path,
+            'status' => 'pending', // Pending verification
+            'note' => 'Uploaded by user',
+        ]);
+
+        return redirect()->back()->with('success', 'Payment proof uploaded successfully! Please wait for admin verification.');
     }
 }

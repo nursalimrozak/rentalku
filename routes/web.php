@@ -28,8 +28,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile/settings', [App\Http\Controllers\ProfileController::class, 'settings'])->name('profile.settings');
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/document', [App\Http\Controllers\ProfileController::class, 'uploadDocument'])->name('profile.upload-document');
+    Route::post('/vouchers/check', [App\Http\Controllers\VoucherController::class, 'check'])->name('vouchers.check');
     Route::resource('my-bookings', App\Http\Controllers\MyBookingController::class);
     Route::post('/bookings', [App\Http\Controllers\BookingController::class, 'store'])->name('public.bookings.store');
+    Route::post('/bookings/{booking}/payment', [App\Http\Controllers\BookingController::class, 'uploadPayment'])->name('bookings.upload-payment');
 
     // Admin Routes
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
@@ -41,6 +43,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/cars/{car}', [App\Http\Controllers\Admin\CarController::class, 'show'])->name('cars.show');
         Route::resource('seasonal-prices', App\Http\Controllers\Admin\SeasonalPriceController::class);
         Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
+        Route::resource('bank-accounts', App\Http\Controllers\Admin\BankAccountController::class);
         Route::resource('maintenances', App\Http\Controllers\Admin\MaintenanceController::class);
         Route::resource('payments', App\Http\Controllers\Admin\PaymentController::class);
         Route::post('/customers/{customer}/verify', [App\Http\Controllers\Admin\CustomerController::class, 'verify'])->name('customers.verify');

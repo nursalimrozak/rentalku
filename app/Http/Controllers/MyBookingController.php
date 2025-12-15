@@ -20,12 +20,14 @@ class MyBookingController extends Controller
 
     public function show($id)
     {
-        $booking = Booking::with('car')->findOrFail($id);
+        $booking = Booking::with(['car', 'payments'])->findOrFail($id);
 
         if ($booking->user_id !== Auth::id()) {
             abort(403);
         }
+
+        $bankAccounts = \App\Models\BankAccount::where('is_active', true)->get();
         
-        return view('dashboard.penyewa.bookings.show', compact('booking'));
+        return view('dashboard.penyewa.bookings.show', compact('booking', 'bankAccounts'));
     }
 }

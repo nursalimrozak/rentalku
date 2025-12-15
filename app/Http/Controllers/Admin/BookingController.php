@@ -10,7 +10,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Booking::with(['user', 'car'])->latest()->get();
+        $bookings = Booking::with(['user', 'car', 'payments'])->latest()->get();
         return view('admin.bookings.index', compact('bookings'));
     }
 
@@ -149,12 +149,22 @@ class BookingController extends Controller
         ]);
 
         // Auto update status logic (existing)
-        if ($request->payment_type == 'full_payment' || ($request->payment_type == 'repayment' && $booking->status == 'confirmed')) {
+        if ($request->payment_type == 'full_payment') {
              if($booking->status == 'pending_payment') {
                  $booking->update(['status' => 'confirmed']);
              }
         } elseif ($request->payment_type == 'down_payment') {
              if($booking->status == 'pending_payment') {
+                 // As per user request, can be confirmed or dp_50. Using dp_50 for distinct tracking as per initial request.
+                 // User update: "if approved by admin status can be changed to confirmed". 
+                 // So we allow confirmed. But let's set it to dp_50 first, admin can manually change to confirmed if they want, 
+                 // OR we set to dp_50 and upon repayment set to confirmed.
+                 $booking->update(['status' => 'confirmed']); // Changed to confirmed as per latest request
+             }
+        } elseif ($request->payment_type == 'repayment') {
+             // Check if fully paid
+             $totalPaid = $booking->payments()->where('status', 'verified')->where('type', '!=', 'penalty_payment')->sum('amount') + $amount;
+             if ($totalPaid >= $booking->total_price) {
                  $booking->update(['status' => 'confirmed']);
              }
         }
@@ -171,16 +181,28 @@ class BookingController extends Controller
     public function updateStatus(Request $request, Booking $booking)
     {
         $request->validate([
-            'status' => 'required|in:confirmed,ongoing,completed,cancelled',
+            'status' => 'required|in:pending_payment,dp_50,confirmed,ongoing,completed,cancelled,penalty_pending,penalty_paid',
         ]);
+
+        $newStatus = $request->status;
+        
+        // Constraint: Cannot change to 'ongoing' or 'completed' if not fully paid
+        if (in_array($newStatus, ['ongoing', 'completed'])) {
+            $totalPaid = $booking->payments()->where('status', 'verified')->where('type', '!=', 'penalty_payment')->sum('amount');
+            // Allow small margin of error or exact check
+            if ($totalPaid < $booking->total_price) {
+                return back()->with('error', 'Cannot change status to ' . $newStatus . '. Booking is not fully paid.');
+            }
+        }
 
         $booking->update([
-            'status' => $request->status,
+            'status' => $newStatus,
         ]);
 
-        // If cancelled, we might want to release the car or do other logic, 
-        // but for now simple status update. 
-        // If completed, we might want to check for penalties etc, but keeping it simple for now.
+        // Auto-verify pending payments if status implies payment received
+        if (in_array($newStatus, ['confirmed', 'dp_50', 'penalty_paid', 'completed', 'ongoing'])) {
+             $booking->payments()->where('status', 'pending')->update(['status' => 'verified']);
+        }
 
         return redirect()->route('admin.bookings.show', $booking->id)->with('success', 'Booking status updated successfully.');
     }

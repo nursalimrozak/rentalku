@@ -279,6 +279,11 @@
 										<i class="ti ti-credit-card"></i><span>Payments</span>
 									</a>
 								</li>
+								<li>
+									<a href="{{ route('admin.bank-accounts.index') }}" class="{{ request()->routeIs('admin.bank-accounts.*') ? 'active' : '' }}">
+										<i class="ti ti-building-bank"></i><span>Bank Accounts</span>
+									</a>
+								</li>
 							</ul>
 						</li>
 						<li class="menu-title"><span>OTHERS</span></li>

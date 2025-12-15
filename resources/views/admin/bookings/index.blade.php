@@ -116,6 +116,12 @@
                                      'pending_payment' => 'Menunggu Pembayaran',
                                      default => ucfirst(str_replace('_', ' ', $booking->status))
                                 };
+                                
+                                // Override if there is a pending payment upload
+                                if ($booking->payments->contains('status', 'pending') && !in_array($booking->status, ['confirmed', 'ongoing', 'completed', 'cancelled', 'penalty_paid'])) {
+                                    $statusLabel = 'Menunggu Verifikasi';
+                                    $badgeClass = 'bg-info';
+                                }
                             @endphp
                             <span class="badge {{ $badgeClass }}">{{ $statusLabel }}</span>
                         </td>

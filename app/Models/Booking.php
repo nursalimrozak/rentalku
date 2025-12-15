@@ -39,6 +39,7 @@ class Booking extends Model
         'driver_id',
         'km_limit',
         'excess_km_price',
+        'payment_type',
     ];
 
     protected $casts = [
