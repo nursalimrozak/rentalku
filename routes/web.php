@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::post('/profile/document', [App\Http\Controllers\ProfileController::class, 'uploadDocument'])->name('profile.upload-document');
     Route::resource('my-bookings', App\Http\Controllers\MyBookingController::class);
+    Route::post('/bookings', [App\Http\Controllers\BookingController::class, 'store'])->name('public.bookings.store');
 
     // Admin Routes
     Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {

@@ -53,8 +53,7 @@
                                                 <span class="badge {{ $badgeClass }} text-white">{{ ucfirst(str_replace('_', ' ', $booking->status)) }}</span>
                                             </td>
                                             <td>
-                                                <!-- Placeholder for detail link -->
-                                                <a href="#" class="btn btn-sm btn-primary">Details</a>
+                                                <a href="{{ route('my-bookings.show', $booking->id) }}" class="btn btn-sm btn-primary">Details</a>
                                             </td>
                                         </tr>
                                         @empty

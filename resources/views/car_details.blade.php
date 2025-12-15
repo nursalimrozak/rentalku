@@ -276,310 +276,211 @@
                 <div class="col-lg-4 theiaStickySidebar">
                     <div class="review-sec mt-0">
                         <div class="review-header">
-                            <h4>Pricing</h4>
+                            <h4>Book This Car</h4>
                         </div>
-                        <div class="mb-3">
-                            <label class="booking_custom_check bookin-check-2">
-                                <input type="radio" name="price_rate" checked="">
-                                <span class="booking_checkmark">
-                                    <span class="checked-title">Daily</span>
-                                    <span class="price-rate">Rp {{ number_format($car->rental_rate_per_day, 0, ',', '.') }}</span>		
-                                </span>			
-                            </label>
-                        </div>
-                        
-                        @if($car->rental_rate_per_week > 0)
-                        <div class="mb-3">
-                            <label class="booking_custom_check bookin-check-2">
-                                <input type="radio" name="price_rate">
-                                <span class="booking_checkmark">
-                                    <span class="checked-title">Weekly</span>
-                                    <span class="price-rate">Rp {{ number_format($car->rental_rate_per_week, 0, ',', '.') }}</span>		
-                                </span>			
-                            </label>
-                        </div>
-                        @endif
+                        <form action="{{ route('public.bookings.store') }}" method="POST">
+                            @csrf
+                            <input type="hidden" name="car_id" value="{{ $car->id }}">
 
-                        @if($car->rental_rate_per_month > 0)
-                        <div class="mb-3">
-                            <label class="booking_custom_check bookin-check-2">
-                                <input type="radio" name="price_rate">
-                                <span class="booking_checkmark">
-                                    <span class="checked-title">Monthly</span>
-                                    <span class="price-rate">Rp {{ number_format($car->rental_rate_per_month, 0, ',', '.') }}</span>		
-                                </span>			
-                            </label>
-                        </div>
-                        @endif
+                            <div class="mb-3">
+                                <label class="booking_custom_check bookin-check-2">
+                                    <input type="radio" name="rental_type" value="daily" checked>
+                                    <span class="booking_checkmark">
+                                        <span class="checked-title">Daily</span>
+                                        <span class="price-rate">Rp {{ number_format($car->rental_rate_per_day, 0, ',', '.') }}</span>		
+                                    </span>			
+                                </label>
+                            </div>
+                            
+                            @if($car->rental_rate_per_week > 0)
+                            <div class="mb-3">
+                                <label class="booking_custom_check bookin-check-2">
+                                    <input type="radio" name="rental_type" value="weekly">
+                                    <span class="booking_checkmark">
+                                        <span class="checked-title">Weekly</span>
+                                        <span class="price-rate">Rp {{ number_format($car->rental_rate_per_week, 0, ',', '.') }}</span>		
+                                    </span>			
+                                </label>
+                            </div>
+                            @endif
 
-                        <div class="location-content">
-                            @auth
-                                @if(auth()->user()->is_verified)
-                                    <div class="delivery-tab">	
-                                        <ul class="nav">
-                                            <li>
+                            @if($car->rental_rate_per_month > 0)
+                            <div class="mb-3">
+                                <label class="booking_custom_check bookin-check-2">
+                                    <input type="radio" name="rental_type" value="monthly">
+                                    <span class="booking_checkmark">
+                                        <span class="checked-title">Monthly</span>
+                                        <span class="price-rate">Rp {{ number_format($car->rental_rate_per_month, 0, ',', '.') }}</span>		
+                                    </span>			
+                                </label>
+                            </div>
+                            @endif
+
+                            <div class="location-content">
+                                @auth
+                                    @if(auth()->user()->is_verified)
+                                        <hr>
+                                        <!-- Dates & Times -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="input-block mb-3">
+                                                    <label>Start Date</label>
+                                                    <div class="group-img">
+                                                        <div class="form-wrap">
+                                                            <input type="date" name="start_date" class="form-control" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="input-block">
+                                                    <label>Start Time</label>
+                                                    <div class="group-img">
+                                                        <div class="form-wrap">
+                                                            <input type="time" name="start_time" class="form-control" required>
+                                                            <span class="form-icon" style="pointer-events: none;">
+                                                                <i class="fa-regular fa-clock"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="input-block mb-3">
+                                                    <label>End Date</label>
+                                                    <div class="group-img">
+                                                        <div class="form-wrap">
+                                                            <input type="date" name="end_date" class="form-control" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="input-block">
+                                                    <label>End Time</label>
+                                                    <div class="group-img">
+                                                        <div class="form-wrap">
+                                                            <input type="time" name="end_time" class="form-control" required>
+                                                            <span class="form-icon" style="pointer-events: none;">
+                                                                <i class="fa-regular fa-clock"></i>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Service Type -->
+                                        <div class="mb-3 mt-3">
+                                            <label class="form-label">Service Type</label>
+                                            <div class="d-flex gap-3">
                                                 <label class="booking_custom_check">
-                                                    <input type="radio" name="rent_type" checked="">
+                                                    <input type="radio" name="service_type" value="delivery" checked id="service_delivery">
                                                     <span class="booking_checkmark">
                                                         <span class="checked-title">Delivery</span>
                                                     </span>							
                                                 </label>
-                                            </li>
-                                            <li>
                                                 <label class="booking_custom_check">
-                                                    <input type="radio" name="rent_type">
+                                                    <input type="radio" name="service_type" value="self_pickup" id="service_pickup">
                                                     <span class="booking_checkmark">
                                                         <span class="checked-title">Self Pickup</span>
                                                     </span>							
                                                 </label>
-                                            </li>
-                                        </ul>	
-                                    </div>
-                                    <div class="tab-content">
-                                        <div class="tab-pane fade active show" id="delivery">
-                                            <form class="">
-                                                <ul>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label>Delivery Location</label>
-                                                            <div class="group-img">
-                                                                <div class="form-wrap">
-                                                                    <input type="text" class="form-control" placeholder="45, 4th Avanue  Mark Street USA">
-                                                                    <span class="form-icon">
-                                                                        <i class="fa-solid fa-location-crosshairs"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label class="custom_check d-inline-flex location-check m-0"><span>Return to same location</span>
-                                                                <input type="checkbox" name="remeber">
-                                                                <span class="checkmark"></span>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label>Return Location</label>										
-                                                            <div class="group-img">
-                                                                <div class="form-wrap">
-                                                                    <input type="text" class="form-control" placeholder="78, 10th street Laplace USA">
-                                                                    <span class="form-icon">
-                                                                        <i class="fa-solid fa-location-crosshairs"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">						
-                                                        <div class="input-block m-0">	
-                                                            <label>Pickup Date</label>
-                                                        </div>
-                                                        <div class="input-block-wrapp sidebar-form">
-                                                            <div class="input-block  me-lg-2">											
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-calendar-days"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="input-block">											
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control timepicker" placeholder="11:00 AM">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-clock"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>	
-                                                    </li>
-                                                    <li class="column-group-main">						
-                                                        <div class="input-block m-0">		                                       		<label>Return Date</label>
-                                                        </div>
-                                                        <div class="input-block-wrapp sidebar-form">
-                                                            <div class="input-block me-lg-2">												
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-calendar-days"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="input-block">											
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control timepicker" placeholder="11:00 AM">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-clock"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>	
-                                                    </li>
-                                                    <li class="column-group-last">
-                                                        <div class="input-block mb-0">
-                                                            <div class="search-btn">
-                                                                <a href="booking-checkout.html" class="btn btn-primary check-available w-100">Book</a>
-                                                                    <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</a>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </form>	
+                                            </div>
                                         </div>
-                                        <div class="tab-pane fade" id="pickup">
-                                            <form class="">
-                                                <ul>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label>Delivery Location</label>
-                                                            <div class="group-img">
-                                                                <div class="form-wrap">
-                                                                    <select class="select">
-                                                                        <option>Newyork Office - 78, 10th street Laplace USA</option>
-                                                                        <option>Newyork Office - 12, 5th street USA</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label class="custom_check d-inline-flex location-check m-0"><span>Return to same location</span>
-                                                                <input type="checkbox" name="remeber">
-                                                                <span class="checkmark"></span>
-                                                            </label>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label>Delivery Location</label>
-                                                            <div class="group-img">
-                                                                <div class="form-wrap">
-                                                                    <select class="select">
-                                                                        <option>Newyork Office - 78, 10th street Laplace USA</option>
-                                                                        <option>Newyork Office - 12, 5th street USA</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">
-                                                        <div class="input-block">
-                                                            <label>Return Location</label>										
-                                                            <div class="group-img">
-                                                                <div class="form-wrap">
-                                                                    <input type="text" class="form-control" placeholder="78, 10th street Laplace USA">
-                                                                    <span class="form-icon">
-                                                                        <i class="fa-solid fa-location-crosshairs"></i>
-                                                                    </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li class="column-group-main">						
-                                                        <div class="input-block m-0">	
-                                                            <label>Pickup Date</label>
-                                                        </div>
-                                                        <div class="input-block-wrapp sidebar-form">
-                                                            <div class="input-block  me-lg-2">											
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-calendar-days"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="input-block">											
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control timepicker" placeholder="11:00 AM">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-clock"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>	
-                                                    </li>
-                                                    <li class="column-group-main">						
-                                                        <div class="input-block m-0">		                                       		<label>Return Date</label>
-                                                        </div>
-                                                        <div class="input-block-wrapp sidebar-form">
-                                                            <div class="input-block me-2">												
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-calendar-days"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="input-block">											
-                                                                <div class="group-img">
-                                                                    <div class="form-wrap">
-                                                                        <input type="text" class="form-control timepicker" placeholder="11:00 AM">
-                                                                        <span class="form-icon">
-                                                                            <i class="fa-regular fa-clock"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>	
-                                                    </li>
-                                                    <li class="column-group-last">
-                                                        <div class="input-block mb-0">
-                                                            <div class="search-btn">
-                                                                <a href="booking-checkout.html" class="btn btn-primary check-available w-100">Book</a>
-                                                                <a href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#enquiry" class="btn btn-theme">Enquire Us</a>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </form>	
+
+                                        <!-- Delivery Address (Show/Hide based on service type) -->
+                                        <div class="input-block" id="delivery_address_div">
+                                            <label>Delivery Location</label>
+                                            <div class="group-img">
+                                                <div class="form-wrap">
+                                                    <input type="text" name="delivery_address" class="form-control" placeholder="Enter delivery address">
+                                                    <span class="form-icon"><i class="fa-solid fa-location-dot"></i></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+
+                                        <!-- Driver Option -->
+                                        <div class="input-block mb-3">
+                                            <label class="custom_check d-inline-flex">
+                                                <span>Use Driver (+ Rp {{ number_format($car->driver_fee_in_city ?? 150000, 0, ',', '.') }}/day)</span>
+                                                <input type="checkbox" name="use_driver" value="1">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+
+                                        <!-- Passengers -->
+                                        <div class="input-block">
+                                            <label>Passengers</label>
+                                            <div class="group-img">
+                                                <div class="form-wrap">
+                                                    <input type="number" name="passengers" class="form-control" min="1" max="{{ $car->seating_capacity }}" value="1">
+                                                    <span class="form-icon"><i class="fa-solid fa-user"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Voucher Code -->
+                                        <div class="input-block mb-3">
+                                            <label>Voucher Code</label>
+                                            <div class="group-img">
+                                                <div class="form-wrap">
+                                                    <input type="text" name="voucher_code" class="form-control" placeholder="Enter voucher code (optional)">
+                                                    <span class="form-icon"><i class="fa-solid fa-ticket"></i></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Payment Type -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Payment Preference</label>
+                                            <select class="form-select" name="payment_type">
+                                                <option value="full_payment">Full Payment</option>
+                                                <option value="down_payment">Down Payment (50%)</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-block mb-0 mt-3">
+                                            <div class="search-btn">
+                                                <button type="submit" class="btn btn-primary check-available w-100">Book Now</button>
+                                            </div>
+                                        </div>
+                                        
+                                        @if($errors->any())
+                                            <div class="alert alert-danger mt-3">
+                                                <ul class="mb-0">
+                                                    @foreach($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
+                                    @else
+                                        <div class="p-4 bg-light rounded text-center">
+                                            <div class="mb-3">
+                                                <span class="avatar avatar-xl rounded-circle bg-warning text-white">
+                                                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                                                </span>
+                                            </div>
+                                            <h5>Account Not Verified</h5>
+                                            <p class="text-muted mb-3">You need to verify your account by uploading your KTP and SIM before you can book a vehicle.</p>
+                                            <a href="{{ route('profile.settings') }}" class="btn btn-primary w-100">
+                                                Verify Account
+                                            </a>
+                                        </div>
+                                    @endif
                                 @else
                                     <div class="p-4 bg-light rounded text-center">
                                         <div class="mb-3">
-                                            <span class="avatar avatar-xl rounded-circle bg-warning text-white">
-                                                <i class="ti ti-alert-circle fs-1"></i>
+                                            <span class="avatar avatar-xl rounded-circle bg-primary text-white">
+                                                <i class="fas fa-lock fa-2x"></i>
                                             </span>
                                         </div>
-                                        <h5>Account Not Verified</h5>
-                                        <p class="text-muted mb-3">You need to verify your account by uploading your KTP and SIM before you can book a vehicle.</p>
-                                        <a href="{{ route('profile.settings') }}" class="btn btn-primary w-100">
-                                            <i class="ti ti-user-check me-2"></i>Verify Account
-                                        </a>
+                                        <h5>Login Required</h5>
+                                        <p class="text-muted mb-3">Please login or register to book this vehicle.</p>
+                                        <a href="{{ route('login') }}" class="btn btn-primary w-100 mb-2">Login</a>
+                                        <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">Register</a>
                                     </div>
-                                @endif
-                            @else
-                                <div class="p-4 bg-light rounded text-center">
-                                    <div class="mb-3">
-                                        <span class="avatar avatar-xl rounded-circle bg-primary text-white">
-                                            <i class="ti ti-lock fs-1"></i>
-                                        </span>
-                                    </div>
-                                    <h5>Login Required</h5>
-                                    <p class="text-muted mb-3">Please login or register to book this vehicle.</p>
-                                    <a href="{{ route('login') }}" class="btn btn-primary w-100 mb-2">Login</a>
-                                    <a href="{{ route('register') }}" class="btn btn-outline-primary w-100">Register</a>
-                                </div>
-                            @endauth
-                        </div>	
+                                @endauth
+                            </div>	
+                        </form>
                     </div>
                     
                     <div class="review-sec share-car mt-0 mb-0">
@@ -674,6 +575,22 @@
 @push('scripts')
 <script>
     $(document).ready(function() {
+        // Toggle Delivery Address
+        function toggleDeliveryAddress() {
+            if ($('#service_delivery').is(':checked')) {
+                $('#delivery_address_div').show();
+            } else {
+                $('#delivery_address_div').hide();
+            }
+        }
+
+        $('input[name="service_type"]').on('change', function() {
+            toggleDeliveryAddress();
+        });
+
+        // Initialize on load
+        toggleDeliveryAddress();
+
         if ($('.detail-bigimg').length > 0) {
             $('.detail-bigimg').slick({
                 slidesToShow: 1,

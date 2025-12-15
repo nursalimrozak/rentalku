@@ -18,15 +18,14 @@ class MyBookingController extends Controller
         return view('dashboard.penyewa.bookings.index', compact('bookings'));
     }
 
-    public function show(Booking $booking)
+    public function show($id)
     {
+        $booking = Booking::with('car')->findOrFail($id);
+
         if ($booking->user_id !== Auth::id()) {
             abort(403);
         }
         
-        // We can reuse a view or create a specific one. 
-        // For now, let's assume we might want a specific user view vs admin view.
-        // Or we can reuse existing admin view components if they are generic enough, but usually better to have separate.
         return view('dashboard.penyewa.bookings.show', compact('booking'));
     }
 }
