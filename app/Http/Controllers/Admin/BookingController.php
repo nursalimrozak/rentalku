@@ -8,9 +8,20 @@ use Illuminate\Http\Request;
 
 class BookingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $bookings = Booking::with(['user', 'car', 'payments'])->latest()->get();
+        $query = Booking::with(['user', 'car', 'payments'])->latest();
+
+        if ($request->filled('start_date') && $request->filled('end_date')) {
+            $query->whereBetween('start_date', [$request->start_date, $request->end_date]);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $bookings = $query->paginate(5)->withQueryString();
+        
         return view('admin.bookings.index', compact('bookings'));
     }
 

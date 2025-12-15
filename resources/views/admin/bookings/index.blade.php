@@ -29,6 +29,37 @@
 </div>
 @endif
 
+<!-- Filter -->
+<div class="card mb-3">
+    <div class="card-body">
+        <form action="{{ route('admin.bookings.index') }}" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label">Start Date</label>
+                <input type="date" name="start_date" class="form-control" value="{{ request('start_date') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">End Date</label>
+                <input type="date" name="end_date" class="form-control" value="{{ request('end_date') }}">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option value="pending_payment" {{ request('status') == 'pending_payment' ? 'selected' : '' }}>Pending Payment</option>
+                    <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
+                    <option value="ongoing" {{ request('status') == 'ongoing' ? 'selected' : '' }}>Ongoing</option>
+                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                    <option value="cancelled" {{ request('status') == 'cancelled' ? 'selected' : '' }}>Cancelled</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary w-100"><i class="ti ti-filter me-1"></i> Filter</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- /Filter -->
+
 <!-- Custom Data Table -->
 <div class="card">
     <div class="card-body">
@@ -148,6 +179,9 @@
         
                 </tbody>	
             </table>
+        </div>
+        <div class="mt-3">
+             {{ $bookings->links('pagination::bootstrap-5') }}
         </div>
     </div>
 </div>

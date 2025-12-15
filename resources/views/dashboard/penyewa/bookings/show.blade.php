@@ -154,6 +154,49 @@
                                         <h6 class="mb-0">Payment Information</h6>
                                     </div>
                                     <div class="card-body">
+                                        <!-- Payment Timer -->
+                                        @if($booking->status == 'pending_payment')
+                                            @php
+                                                $expiryTime = $booking->created_at->addMinutes(15);
+                                                $remainingSeconds = now()->diffInSeconds($expiryTime, false);
+                                            @endphp
+
+                                            @if($remainingSeconds > 0)
+                                                <div class="alert alert-warning text-center mb-4">
+                                                    <h5 class="alert-heading text-warning mb-1"><i class="ti ti-clock me-1"></i> Segera Lakukan Pembayaran</h5>
+                                                    <p class="mb-2">Selesaikan pembayaran Anda sebelum waktu habis untuk menghindari pembatalan otomatis.</p>
+                                                    <h2 class="fw-bold text-danger mb-0" id="paymentTimer">--:--</h2>
+                                                </div>
+
+                                                @push('scripts')
+                                                <script>
+                                                    document.addEventListener('DOMContentLoaded', function() {
+                                                        let remainingTime = {{ $remainingSeconds }};
+                                                        const timerElement = document.getElementById('paymentTimer');
+
+                                                        if(timerElement) {
+                                                            const timerInterval = setInterval(function() {
+                                                                if (remainingTime <= 0) {
+                                                                    clearInterval(timerInterval);
+                                                                    timerElement.textContent = "Waktu Habis";
+                                                                    timerElement.classList.remove('text-muted');
+                                                                    timerElement.classList.add('text-danger');
+                                                                    setTimeout(() => location.reload(), 3000);
+                                                                    return;
+                                                                }
+
+                                                                const minutes = Math.floor(remainingTime / 60);
+                                                                const seconds = Math.floor(remainingTime % 60);
+                                                                
+                                                                timerElement.textContent = `${minutes} Menit ${seconds} Detik`;
+                                                                remainingTime--;
+                                                            }, 1000);
+                                                        }
+                                                    });
+                                                </script>
+                                                @endpush
+                                            @endif
+                                        @endif
                                         <!-- Bank Accounts -->
                                         @if(!$isFullyPaid || $hasPenalty)
                                         <div class="mb-4">
@@ -166,11 +209,11 @@
                                                             <i class="ti ti-building-bank fs-4 me-2 text-primary"></i>
                                                             <h6 class="mb-0">{{ $account->bank_name }}</h6>
                                                         </div>
-                                                        <p class="mb-1 text-muted small">Account Number</p>
+                                                        <p class="mb-1 text-dark small fw-bold">Account Number</p>
                                                         <h5 class="mb-1 copy-text" role="button" onclick="navigator.clipboard.writeText('{{ $account->account_number }}'); alert('Copied!');" title="Click to copy">
                                                             {{ $account->account_number }} <i class="ti ti-copy fs-6 ms-1 text-muted"></i>
                                                         </h5>
-                                                        <p class="mb-0 text-muted small">A.N {{ $account->account_holder }}</p>
+                                                        <p class="mb-0 text-dark small fw-bold">A.N {{ $account->account_holder }}</p>
                                                     </div>
                                                 </div>
                                                 @endforeach

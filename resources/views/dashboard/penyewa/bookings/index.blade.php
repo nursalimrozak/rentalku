@@ -63,7 +63,9 @@
                                         @endforelse
                                     </tbody>
                             </table>
-                            {{ $bookings->links() }}
+                            <div class="mt-3">
+                                {{ $bookings->links('pagination::bootstrap-5') }}
+                            </div>
                         </div>
                     </div>
                 </div>

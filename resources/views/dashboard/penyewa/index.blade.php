@@ -56,7 +56,7 @@
             <div class="widget-header">
                 <div class="widget-content">
                     <h6>Total Spent</h6>
-                    <h3>IDR {{ number_format(Auth::user()->bookings()->sum('total_price'), 0, ',', '.') }}</h3>
+                    <h3>IDR {{ number_format(Auth::user()->bookings()->where('status', '!=', 'cancelled')->sum('total_price'), 0, ',', '.') }}</h3>
                 </div>
                 <div class="widget-icon">
                     <span class="bg-warning">

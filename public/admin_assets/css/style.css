@@ -13993,7 +13993,7 @@ button.swal2-cancel {
 }
 .page-wrapper .content {
   padding: 24px;
-  min-height: calc(100vh - 105px);
+  min-height: calc(105vh - 105px);
   border-radius: 30px;
   background: var(--light);
 }
