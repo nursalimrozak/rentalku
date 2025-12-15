@@ -1,0 +1,69 @@
+@extends('layouts.admin')
+
+@section('content')
+<div class="content me-0">
+    <div class="mb-3">
+        <a href="{{ route('admin.maintenances.index') }}" class="d-inline-flex align-items-center fw-medium"><i class="ti ti-arrow-left me-1"></i>Back to List</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Schedule Maintenance</h4>
+        </div>
+        <div class="card-body">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('admin.maintenances.store') }}" method="POST">
+                @csrf
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Car <span class="text-danger">*</span></label>
+                        <select name="car_id" class="form-select" required>
+                            <option value="">Select Car</option>
+                            @foreach($cars as $car)
+                                <option value="{{ $car->id }}" {{ old('car_id') == $car->id ? 'selected' : '' }}>{{ $car->name }} - {{ $car->license_plate }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Date <span class="text-danger">*</span></label>
+                        <input type="date" name="date" class="form-control" value="{{ old('date', date('Y-m-d')) }}" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Status <span class="text-danger">*</span></label>
+                        <select name="status" class="form-select" required>
+                            <option value="scheduled" {{ old('status') == 'scheduled' ? 'selected' : '' }}>Scheduled</option>
+                            <option value="ongoing" {{ old('status') == 'ongoing' ? 'selected' : '' }}>In Progress (Ongoing)</option>
+                            <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estimated Cost (IDR) <span class="text-danger">*</span></label>
+                        <input type="number" name="cost" class="form-control" value="{{ old('cost', 0) }}" min="0" required>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Description <span class="text-danger">*</span></label>
+                        <textarea name="description" class="form-control" rows="3" required placeholder="Describe the maintenance required...">{{ old('description') }}</textarea>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-primary">Save Maintenance</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection

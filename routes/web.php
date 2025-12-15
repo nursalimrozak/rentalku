@@ -1,0 +1,56 @@
+<?php
+
+use App\Http\Controllers\AuthController;
+
+Route::get('/', function () {
+    $cars = App\Models\Car::latest()->limit(6)->get();
+    return view('welcome', compact('cars'));
+})->name('home');
+
+
+Route::get('/list-kendaraan', [App\Http\Controllers\CarController::class, 'index'])->name('cars.index');
+Route::get('/detail-kendaraan/{car}', [App\Http\Controllers\CarController::class, 'show'])->name('car.details');
+
+// Driver Routes
+Route::get('/drivers', [App\Http\Controllers\DriverController::class, 'index'])->name('drivers.index');
+Route::get('/drivers/{driver}', [App\Http\Controllers\DriverController::class, 'show'])->name('drivers.show');
+
+// Authentication Routes
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    // Customer Routes
+    Route::get('/profile/settings', [App\Http\Controllers\ProfileController::class, 'settings'])->name('profile.settings');
+    Route::put('/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/profile/document', [App\Http\Controllers\ProfileController::class, 'uploadDocument'])->name('profile.upload-document');
+    Route::resource('my-bookings', App\Http\Controllers\MyBookingController::class);
+
+    // Admin Routes
+    Route::group(['prefix' => 'admin', 'as' => 'admin.'], function () {
+        Route::get('/cars', [App\Http\Controllers\Admin\CarController::class, 'index'])->name('cars.index');
+        Route::get('/cars/create', [App\Http\Controllers\Admin\CarController::class, 'create'])->name('cars.create');
+        Route::post('/cars', [App\Http\Controllers\Admin\CarController::class, 'store'])->name('cars.store');
+        Route::get('/cars/{car}/edit', [App\Http\Controllers\Admin\CarController::class, 'edit'])->name('cars.edit');
+        Route::put('/cars/{car}', [App\Http\Controllers\Admin\CarController::class, 'update'])->name('cars.update');
+        Route::get('/cars/{car}', [App\Http\Controllers\Admin\CarController::class, 'show'])->name('cars.show');
+        Route::resource('seasonal-prices', App\Http\Controllers\Admin\SeasonalPriceController::class);
+        Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
+        Route::resource('maintenances', App\Http\Controllers\Admin\MaintenanceController::class);
+        Route::resource('payments', App\Http\Controllers\Admin\PaymentController::class);
+        Route::post('/customers/{customer}/verify', [App\Http\Controllers\Admin\CustomerController::class, 'verify'])->name('customers.verify');
+        Route::post('/documents/{document}/status', [App\Http\Controllers\Admin\CustomerController::class, 'updateDocumentStatus'])->name('documents.update-status');
+        Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
+        Route::resource('drivers', App\Http\Controllers\Admin\DriverController::class);
+        Route::get('/bookings', [App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
+        Route::get('/bookings/create', [App\Http\Controllers\Admin\BookingController::class, 'create'])->name('bookings.create');
+        Route::post('/bookings', [App\Http\Controllers\Admin\BookingController::class, 'store'])->name('bookings.store');
+        Route::get('/bookings/{booking}', [App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
+        Route::post('/bookings/{booking}/payment', [App\Http\Controllers\Admin\BookingController::class, 'uploadPayment'])->name('bookings.upload-payment');
+        Route::put('/bookings/{booking}/status', [App\Http\Controllers\Admin\BookingController::class, 'updateStatus'])->name('bookings.update-status');
+    });
+});
