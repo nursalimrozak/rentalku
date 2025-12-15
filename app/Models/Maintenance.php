@@ -17,11 +17,12 @@ class Maintenance extends Model
         'description',
         'cost',
         'status',
+        'proof_file_path',
     ];
 
     protected $casts = [
-        'date' => 'date',
-        'end_date' => 'date',
+        'date' => 'datetime',
+        'end_date' => 'datetime',
     ];
 
     public function car()

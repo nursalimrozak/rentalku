@@ -21,7 +21,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.maintenances.store') }}" method="POST">
+            <form action="{{ route('admin.maintenances.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     <div class="col-md-6 mb-3">
@@ -35,8 +35,14 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Date <span class="text-danger">*</span></label>
+                        <label class="form-label">Start Date <span class="text-danger">*</span></label>
                         <input type="date" name="date" class="form-control" value="{{ old('date', date('Y-m-d')) }}" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estimated End Date</label>
+                        <input type="date" name="end_date" class="form-control" value="{{ old('end_date') }}">
+                        <small class="text-muted">Optional. Auto-filled when status is completed.</small>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -51,6 +57,12 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Estimated Cost (IDR) <span class="text-danger">*</span></label>
                         <input type="number" name="cost" class="form-control" value="{{ old('cost', 0) }}" min="0" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Proof of Payment</label>
+                        <input type="file" name="proof_file_path" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+                        <small class="text-muted">Upload payment proof (JPG, PNG, PDF - Max 2MB)</small>
                     </div>
 
                     <div class="col-12 mb-3">

@@ -21,7 +21,7 @@
                 </div>
             @endif
 
-            <form action="{{ route('admin.maintenances.update', $maintenance->id) }}" method="POST">
+            <form action="{{ route('admin.maintenances.update', $maintenance->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                 <div class="row">
@@ -36,8 +36,14 @@
                     </div>
 
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">Date <span class="text-danger">*</span></label>
+                        <label class="form-label">Start Date <span class="text-danger">*</span></label>
                         <input type="date" name="date" class="form-control" value="{{ old('date', $maintenance->date->format('Y-m-d')) }}" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Estimated End Date</label>
+                        <input type="date" name="end_date" class="form-control" value="{{ old('end_date', $maintenance->end_date?->format('Y-m-d')) }}">
+                        <small class="text-muted">Optional. Auto-filled when status is completed.</small>
                     </div>
 
                     <div class="col-md-6 mb-3">
@@ -52,6 +58,19 @@
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Cost (IDR) <span class="text-danger">*</span></label>
                         <input type="number" name="cost" class="form-control" value="{{ old('cost', $maintenance->cost) }}" min="0" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Proof of Payment</label>
+                        @if($maintenance->proof_file_path)
+                            <div class="mb-2">
+                                <a href="{{ asset($maintenance->proof_file_path) }}" target="_blank" class="btn btn-sm btn-outline-primary">
+                                    <i class="ti ti-file"></i> View Current Proof
+                                </a>
+                            </div>
+                        @endif
+                        <input type="file" name="proof_file_path" class="form-control" accept=".jpg,.jpeg,.png,.pdf">
+                        <small class="text-muted">Upload new proof to replace existing (JPG, PNG, PDF - Max 2MB)</small>
                     </div>
 
                     <div class="col-12 mb-3">

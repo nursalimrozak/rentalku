@@ -45,9 +45,15 @@ class Car extends Model
         return $this->hasMany(CarImage::class);
     }
 
+    public function maintenances()
+    {
+        return $this->hasMany(Maintenance::class);
+    }
+
     public function isAvailable($startDate, $endDate)
     {
-        return !$this->bookings()
+        // Check for overlapping bookings (excluding cancelled)
+        $hasBookingConflict = $this->bookings()
             ->where('status', '!=', 'cancelled')
             ->where(function ($query) use ($startDate, $endDate) {
                 // Check overlap: Existing Start < Requested End AND Existing End (+30min) > Requested Start
@@ -55,5 +61,27 @@ class Car extends Model
                       ->whereRaw('DATE_ADD(end_date, INTERVAL 30 MINUTE) > ?', [$startDate]);
             })
             ->exists();
+
+        // Check for overlapping maintenance (scheduled or ongoing only)
+        $hasMaintenanceConflict = $this->maintenances()
+            ->whereIn('status', ['scheduled', 'ongoing'])
+            ->where(function ($query) use ($startDate, $endDate) {
+                // Check overlap with maintenance period
+                $query->where(function ($q) use ($startDate, $endDate) {
+                    // Case 1: Maintenance has end_date - check normal overlap
+                    // Overlap if: maintenance_start < requested_end AND maintenance_end > requested_start
+                    $q->whereNotNull('end_date')
+                      ->where('date', '<', $endDate)
+                      ->where('end_date', '>', $startDate);
+                })->orWhere(function ($q) use ($endDate) {
+                    // Case 2: Maintenance has no end_date - treat as ongoing indefinitely
+                    // Block if maintenance start is before or during requested period
+                    $q->whereNull('end_date')
+                      ->where('date', '<=', $endDate);
+                });
+            })
+            ->exists();
+
+        return !$hasBookingConflict && !$hasMaintenanceConflict;
     }
 }
