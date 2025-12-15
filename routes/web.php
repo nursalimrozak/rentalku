@@ -45,12 +45,15 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('vouchers', App\Http\Controllers\Admin\VoucherController::class);
         Route::resource('bank-accounts', App\Http\Controllers\Admin\BankAccountController::class);
         Route::resource('maintenances', App\Http\Controllers\Admin\MaintenanceController::class);
+        Route::post('/payments/{payment}/verify', [App\Http\Controllers\Admin\PaymentController::class, 'verify'])->name('payments.verify');
+        Route::post('/payments/{payment}/reject', [App\Http\Controllers\Admin\PaymentController::class, 'reject'])->name('payments.reject');
         Route::resource('payments', App\Http\Controllers\Admin\PaymentController::class);
         Route::post('/customers/{customer}/verify', [App\Http\Controllers\Admin\CustomerController::class, 'verify'])->name('customers.verify');
         Route::post('/documents/{document}/status', [App\Http\Controllers\Admin\CustomerController::class, 'updateDocumentStatus'])->name('documents.update-status');
         Route::resource('customers', App\Http\Controllers\Admin\CustomerController::class);
         Route::resource('drivers', App\Http\Controllers\Admin\DriverController::class);
         Route::get('/bookings', [App\Http\Controllers\Admin\BookingController::class, 'index'])->name('bookings.index');
+        Route::post('/bookings/check-availability', [App\Http\Controllers\Admin\BookingController::class, 'checkAvailability'])->name('bookings.check-availability');
         Route::get('/bookings/create', [App\Http\Controllers\Admin\BookingController::class, 'create'])->name('bookings.create');
         Route::post('/bookings', [App\Http\Controllers\Admin\BookingController::class, 'store'])->name('bookings.store');
         Route::get('/bookings/{booking}', [App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');

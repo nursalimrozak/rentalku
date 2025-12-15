@@ -41,4 +41,35 @@ class PaymentController extends Controller
 
         return view('admin.payments.index', compact('bookings'));
     }
+
+    public function verify(\App\Models\Payment $payment)
+    {
+        $payment->update(['status' => 'verified']);
+        $booking = $payment->booking;
+
+        if ($payment->type == 'full_payment') {
+            $booking->update(['status' => 'confirmed']);
+        } elseif ($payment->type == 'down_payment') {
+            $booking->update(['status' => 'dp_50']);
+        } elseif ($payment->type == 'repayment') {
+             // Check if fully paid
+             $totalPaid = $booking->payments()->where('status', 'verified')->where('type', '!=', 'penalty_payment')->sum('amount');
+             if ($totalPaid >= $booking->total_price) {
+                 $booking->update(['status' => 'confirmed']);
+             }
+        } elseif ($payment->type == 'penalty_payment') {
+             $booking->update(['penalty_status' => 'paid']);
+             if ($booking->status == 'penalty_pending') {
+                 $booking->update(['status' => 'completed']);
+             }
+        }
+
+        return back()->with('success', 'Payment verified and booking status updated.');
+    }
+
+    public function reject(\App\Models\Payment $payment)
+    {
+        $payment->update(['status' => 'rejected']);
+        return back()->with('success', 'Payment rejected.');
+    }
 }

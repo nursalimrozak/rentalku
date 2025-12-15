@@ -272,6 +272,19 @@
                                                 <span class="badge {{ $payment->status == 'verified' ? 'badge-success-transparent' : ($payment->status == 'rejected' ? 'badge-danger-transparent' : 'badge-warning-transparent') }}">{{ ucfirst($payment->status) }}</span>
                                                 <div class="small fw-bold mt-1">{{ ucfirst(str_replace('_', ' ', $payment->type)) }}</div>
                                                 <small class="d-block text-muted">IDR {{ number_format($payment->amount, 0, ',', '.') }}</small>
+                                                
+                                                @if($payment->status == 'pending')
+                                                    <div class="mt-2 d-flex gap-2 justify-content-center">
+                                                        <form action="{{ route('admin.payments.verify', $payment->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-xs btn-success py-1 px-2">Verify</button>
+                                                        </form>
+                                                        <form action="{{ route('admin.payments.reject', $payment->id) }}" method="POST">
+                                                            @csrf
+                                                            <button type="submit" class="btn btn-xs btn-danger py-1 px-2">Reject</button>
+                                                        </form>
+                                                    </div>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -301,6 +314,7 @@
                                 <option value="completed" {{ $booking->status == 'completed' ? 'selected' : '' }}>Selesai (Completed)</option>
                                 <option value="cancelled" {{ $booking->status == 'cancelled' ? 'selected' : '' }}>Dibatalkan (Cancelled)</option>
                                 <hr>
+                                <option value="dp_50" {{ $booking->status == 'dp_50' ? 'selected' : '' }}>DP 50% Lunas</option>
                                 <option value="pending_payment" {{ $booking->status == 'pending_payment' ? 'selected' : '' }}>Menunggu Pembayaran (Pending)</option>
                             </select>
                         </div>

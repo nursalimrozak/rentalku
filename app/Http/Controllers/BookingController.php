@@ -34,6 +34,11 @@ class BookingController extends Controller
         if ($endDate->lessThanOrEqualTo($startDate)) {
             return back()->withErrors(['end_date' => 'End date and time must be after start date and time.'])->withInput();
         }
+
+        // Check Availability (including 30 min buffer)
+        if (!$car->isAvailable($startDate, $endDate)) {
+            return back()->withErrors(['error' => 'Mobil tidak tersedia pada tanggal/jam yang dipilih. Harap beri jeda 30 menit dari booking sebelumnya.'])->withInput();
+        }
         
         $totalDays = ceil($startDate->diffInHours($endDate) / 24);
 

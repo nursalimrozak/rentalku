@@ -231,6 +231,28 @@
     </div>
 </div>
 
+<!-- Availability Error Modal -->
+<div class="modal fade" id="availabilityErrorModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger-transparent">
+                <h5 class="modal-title text-danger"><i class="ti ti-alert-circle me-2"></i>Unavailable</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div class="text-danger mb-3">
+                    <i class="ti ti-calendar-off fs-1"></i>
+                </div>
+                <h4 class="mb-2">Car Not Available</h4>
+                <p class="text-muted mb-0" id="availabilityErrorMessage"></p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay, I'll change</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
@@ -256,10 +278,52 @@
                 });
 
                 if (isValid) {
-                    const nextTabId = btn.getAttribute('data-next');
-                    const triggerEl = document.querySelector('#' + nextTabId + '-tab');
-                    const tab = bootstrap.Tab.getInstance(triggerEl) || new bootstrap.Tab(triggerEl);
-                    tab.show();
+                    if (currentStepId === 'step1') {
+                        // Check Availability via AJAX
+                        const startDate = document.getElementById('start_date').value;
+                        const endDate = document.getElementById('end_date').value;
+                        const carId = document.getElementById('car_id').value;
+                        
+                        const originalText = btn.innerHTML;
+                        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Checking...';
+                        btn.disabled = true;
+
+                        fetch('{{ route("admin.bookings.check-availability") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ start_date: startDate, end_date: endDate, car_id: carId })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            btn.disabled = false;
+                            btn.innerHTML = originalText;
+                            
+                            if (data.available) {
+                                const nextTabId = btn.getAttribute('data-next');
+                                const triggerEl = document.querySelector('#' + nextTabId + '-tab');
+                                const tab = bootstrap.Tab.getInstance(triggerEl) || new bootstrap.Tab(triggerEl);
+                                tab.show();
+                            } else {
+                                document.getElementById('availabilityErrorMessage').textContent = data.message;
+                                new bootstrap.Modal(document.getElementById('availabilityErrorModal')).show();
+                            }
+                        })
+                        .catch(err => {
+                            btn.disabled = false;
+                            btn.innerHTML = originalText;
+                            console.error(err);
+                            document.getElementById('availabilityErrorMessage').textContent = 'Failed to check availability. Please try again.';
+                            new bootstrap.Modal(document.getElementById('availabilityErrorModal')).show();
+                        });
+                    } else {
+                        const nextTabId = btn.getAttribute('data-next');
+                        const triggerEl = document.querySelector('#' + nextTabId + '-tab');
+                        const tab = bootstrap.Tab.getInstance(triggerEl) || new bootstrap.Tab(triggerEl);
+                        tab.show();
+                    }
                 }
             });
         });

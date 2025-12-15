@@ -59,6 +59,12 @@ class BookingController extends Controller
         $car = \App\Models\Car::find($request->car_id);
         $startDate = \Carbon\Carbon::parse($request->start_date);
         $endDate = \Carbon\Carbon::parse($request->end_date);
+        
+        // Check Availability
+        if (!$car->isAvailable($startDate, $endDate)) {
+            return back()->with('error', 'Mobil tidak tersedia pada jadwal tersebut (termasuk jeda 30 menit).')->withInput();
+        }
+        
         $totalDays = ceil($startDate->diffInHours($endDate) / 24);
 
         $baseTotalInfo = $this->calculateRentalPrice($car, $request->rental_type, $totalDays);
@@ -94,6 +100,25 @@ class BookingController extends Controller
         ]);
 
         return redirect()->route('admin.bookings.show', $booking->id)->with('success', 'Reservation created! Please upload payment proof.');
+    }
+
+    public function checkAvailability(Request $request)
+    {
+        $request->validate([
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'car_id' => 'required|exists:cars,id',
+        ]);
+
+        $car = \App\Models\Car::find($request->car_id);
+        $startDate = \Carbon\Carbon::parse($request->start_date);
+        $endDate = \Carbon\Carbon::parse($request->end_date);
+
+        if (!$car->isAvailable($startDate, $endDate)) {
+            return response()->json(['available' => false, 'message' => 'Mobil tidak tersedia pada jadwal tersebut (termasuk jeda 30 menit).']);
+        }
+
+        return response()->json(['available' => true]);
     }
 
     private function calculateRentalPrice($car, $type, $days)

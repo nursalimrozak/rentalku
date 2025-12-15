@@ -44,4 +44,16 @@ class Car extends Model
     {
         return $this->hasMany(CarImage::class);
     }
+
+    public function isAvailable($startDate, $endDate)
+    {
+        return !$this->bookings()
+            ->where('status', '!=', 'cancelled')
+            ->where(function ($query) use ($startDate, $endDate) {
+                // Check overlap: Existing Start < Requested End AND Existing End (+30min) > Requested Start
+                $query->where('start_date', '<', $endDate)
+                      ->whereRaw('DATE_ADD(end_date, INTERVAL 30 MINUTE) > ?', [$startDate]);
+            })
+            ->exists();
+    }
 }
