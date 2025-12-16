@@ -39,8 +39,8 @@
 	<!-- Slick CSS -->
 	<link rel="stylesheet" href="{{ asset('css/slick.css') }}">
 
-   	<!-- Boxicons CSS -->
-   	<link rel="stylesheet" href="{{ asset('css/boxicons.min.css') }}">
+   	<!-- Bootstrap Icons -->
+   	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -238,10 +238,10 @@
 					</div>
 					<ul class="nav header-navbar-rht">
 						<li class="nav-item user-link">
-							<a class="nav-link btn-secondary btn d-inline-flex align-items-center" href="login.html"><i class="bx bx-user me-1"></i>Sign In</a>
+							<a class="nav-link btn-secondary btn d-inline-flex align-items-center" href="login.html"><i class="bi bi-person-fill me-1"></i>Sign In</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link header-reg  d-inline-flex align-items-center" href="register.html"><span><i class="bx bx-lock"></i></span>Sign Up</a>
+							<a class="nav-link header-reg  d-inline-flex align-items-center" href="register.html"><span><i class="bi bi-lock-fill"></i></span>Sign Up</a>
 						</li>
 					</ul>
 				</nav>
@@ -471,11 +471,7 @@
 	
     @stack('scripts')
 
-    <!-- Rocket Loader (Kept as is but usually not needed in dev, but avoiding removal to match "no change" request, though scripts might need asset if local) -->
-    <!-- The rocket loader script is external/CDN-like, but line 1981 in original view seemed to point to js/rocket-loader.min.js? -->
-    <!-- Line 1981: <script src="js/rocket-loader.min.js" ... -->
-	<script src="{{ asset('js/rocket-loader.min.js') }}" data-cf-settings="1f88975dd7b8518f56843022-|49" defer=""></script>
-    <script defer="" src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" data-cf-beacon='{"rayId":"8e7d8c6b0f4d852a","version":"2024.11.0","token":"3ca157e612a14eccbb30cf6db6691c29","server_timing":{"name":{"cfcachestatus":true,"cfedge":true,"cfextpri":true,"cfl4":true,"cforigin":true,"cfspeedbrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+
 
 </body>
 </html>

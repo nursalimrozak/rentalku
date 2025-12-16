@@ -2,10 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    $cars = App\Models\Car::latest()->limit(6)->get();
-    return view('welcome', compact('cars'));
-})->name('home');
+Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('home');
 
 
 Route::get('/list-kendaraan', [App\Http\Controllers\CarController::class, 'index'])->name('cars.index');
@@ -59,5 +56,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/bookings/{booking}', [App\Http\Controllers\Admin\BookingController::class, 'show'])->name('bookings.show');
         Route::post('/bookings/{booking}/payment', [App\Http\Controllers\Admin\BookingController::class, 'uploadPayment'])->name('bookings.upload-payment');
         Route::put('/bookings/{booking}/status', [App\Http\Controllers\Admin\BookingController::class, 'updateStatus'])->name('bookings.update-status');
+        
+        // CMS Routes
+        Route::resource('section-settings', App\Http\Controllers\Admin\SectionSettingController::class);
+        Route::resource('brands', App\Http\Controllers\Admin\BrandController::class);
+        Route::resource('features', App\Http\Controllers\Admin\FeatureController::class);
+        Route::resource('testimonials', App\Http\Controllers\Admin\TestimonialController::class);
+        Route::resource('faqs', App\Http\Controllers\Admin\FaqController::class);
+        Route::resource('articles', App\Http\Controllers\Admin\ArticleController::class);
+        Route::resource('rental-communities', App\Http\Controllers\Admin\RentalCommunityController::class);
     });
 });

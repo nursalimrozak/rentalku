@@ -310,52 +310,39 @@
 						<li>
 							<ul>
 								<li>
-									<a href="pages.html">
-										<i class="ti ti-file-invoice"></i><span>Pages</span>
+									<a href="{{ route('admin.section-settings.index') }}" class="{{ request()->routeIs('admin.section-settings.*') ? 'active' : '' }}">
+										<i class="ti ti-settings"></i><span>Section Settings</span>
 									</a>
 								</li>
 								<li>
-									<a href="menu-management.html">
-										<i class="ti ti-menu-2"></i><span>Menu Management</span>
+									<a href="{{ route('admin.brands.index') }}" class="{{ request()->routeIs('admin.brands.*') ? 'active' : '' }}">
+										<i class="ti ti-tags"></i><span>Brands</span>
 									</a>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-device-desktop-analytics"></i><span>Blogs</span>
-										<span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="blogs.html">All Blogs</a></li>
-										<li><a href="blog-categories.html">Categories</a></li>
-										<li><a href="blog-comments.html">Comments</a></li>
-										<li><a href="blog-tags.html">Blog Tags</a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-map"></i><span>Locations</span>
-										<span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="countries.html">Countries</a></li>
-										<li><a href="state.html">States</a></li>
-										<li><a href="city.html">Cities</a></li>
-									</ul>
 								</li>
 								<li>
-									<a href="testimonials.html">
+									<a href="{{ route('admin.features.index') }}" class="{{ request()->routeIs('admin.features.*') ? 'active' : '' }}">
+										<i class="ti ti-list-check"></i><span>Features</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
 										<i class="ti ti-brand-hipchat"></i><span>Testimonials</span>
 									</a>
 								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-question-mark"></i><span>FAQ’s</span>
-										<span class="menu-arrow"></span>
+								<li>
+									<a href="{{ route('admin.faqs.index') }}" class="{{ request()->routeIs('admin.faqs.*') ? 'active' : '' }}">
+										<i class="ti ti-question-mark"></i><span>FAQs</span>
 									</a>
-									<ul>
-										<li><a href="faq.html">FAQ's</a></li>
-										<li><a href="faq-category.html">FAQ Category</a></li>
-									</ul>
+								</li>
+								<li>
+									<a href="{{ route('admin.articles.index') }}" class="{{ request()->routeIs('admin.articles.*') ? 'active' : '' }}">
+										<i class="ti ti-news"></i><span>Articles</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{ route('admin.rental-communities.index') }}" class="{{ request()->routeIs('admin.rental-communities.*') ? 'active' : '' }}">
+										<i class="ti ti-users"></i><span>Community Images</span>
+									</a>
 								</li>
 							</ul>
 						</li>

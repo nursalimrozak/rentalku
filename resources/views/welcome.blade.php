@@ -9,9 +9,13 @@
 				   <div class="row align-items-center">					    
 					   	<div class="col-lg-5" data-aos="fade-down">
 							<div class="banner-content">
-								<h1>Explore our <span>Verified & Professional</span> Cars</h1>
-								<p>Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.
-								</p>
+								@if(isset($settings['banner']))
+									<h1>{{ $settings['banner']->title }}</h1>
+									<p>{{ $settings['banner']->description }}</p>
+								@else
+									<h1>Explore our <span>Verified & Professional</span> Cars</h1>
+									<p>Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.</p>
+								@endif
 								<div class="customer-list">
 									<div class="users-wrap">
 										<ul class="users-list">
@@ -46,8 +50,11 @@
 											<h6>$650 <span> /day</span></h6>
 										</span>
 									</div>
-									<span class="rent-tag"><i class="bx bxs-circle"></i> Available for Rent</span>
-									<img src="images/banner.png" class="img-fluid" alt="img">
+									@if(isset($settings['banner']) && $settings['banner']->image)
+										<img src="{{ asset('storage/' . $settings['banner']->image) }}" class="img-fluid" alt="img">
+									@else
+										<img src="{{ asset('images/banner.png') }}" class="img-fluid" alt="img">
+									@endif
 								</div>
 							</div>
 						</div>
@@ -109,6 +116,7 @@
 		</section>
 	   	<!-- /Banner -->
 
+
 		<!-- Feature Section -->
 		<section class="feature-section pt-0">
 			<div class="container">	
@@ -117,10 +125,19 @@
 
 						<div class="feature-img">
 							<div class="section-heading heading-four text-start" data-aos="fade-down">
-								<h2>Best Platform for Car Rental</h2>
-								<p>Why do we choose relax rent bikes generally if we travel in a un known cities with a bike in our hand we feel which is like a home town</p>
+								@if(isset($settings['feature']))
+									<h2>{{ $settings['feature']->title }}</h2>
+									<p>{{ $settings['feature']->description }}</p>
+								@else
+									<h2>Best Platform for Car Rental</h2>
+									<p>Why do we choose relax rent bikes generally if we travel in a un known cities with a bike in our hand we feel which is like a home town</p>
+								@endif
 							</div>
-							<img src="images/car.png" alt="img" class="img-fluid">
+							@if(isset($settings['feature']) && $settings['feature']->image)
+								<img src="{{ asset('storage/' . $settings['feature']->image) }}" class="img-fluid" alt="img">
+							@else
+								<img src="images/car.png" alt="img" class="img-fluid">
+							@endif
 						</div>
 
 					</div>
@@ -128,90 +145,35 @@
 					<div class="col-lg-6">	
 						<div class="row row-gap-4">
 							
+							@forelse($features as $feature)
 							<!-- Feature Item -->
 							<div class="col-md-6 d-flex">
 								<div class="feature-item flex-fill">
 									<span class="feature-icon">
-										<i class="bx bxs-info-circle"></i>
+										<i class="{{ $feature->icon }}"></i>
 									</span>
 									<div>
-										<h6 class="mb-1">Best Deal</h6>
-										<p>Dreams Rent offers a fleet of high-quality </p>
+										<h6 class="mb-1">{{ $feature->title }}</h6>
+										<p>{{ $feature->description }}</p>
 									</div>
 								</div>
 							</div>
 							<!-- /Feature Item -->
-
-							<!-- Feature Item -->
+							@empty
+							<!-- Fallback Static Features -->
 							<div class="col-md-6 d-flex">
 								<div class="feature-item flex-fill">
-									<span class="feature-icon">
-										<i class="bx bx-exclude"></i>
-									</span>
-									<div>
-										<h6 class="mb-1">Doorstep Delivery</h6>
-										<p>Dreams Rent offers a fleet of high-quality </p>
-									</div>
+									<span class="feature-icon"><i class="bx bxs-info-circle"></i></span>
+									<div><h6 class="mb-1">Best Deal</h6><p>Dreams Rent offers a fleet of high-quality </p></div>
 								</div>
 							</div>
-							<!-- /Feature Item -->
-
-							<!-- Feature Item -->
 							<div class="col-md-6 d-flex">
 								<div class="feature-item flex-fill">
-									<span class="feature-icon">
-										<i class="bx bx-money"></i>
-									</span>
-									<div>
-										<h6 class="mb-1">Low Security Deposit</h6>
-										<p>Dreams Rent offers a fleet of high-quality </p>
-									</div>
+									<span class="feature-icon"><i class="bx bx-exclude"></i></span>
+									<div><h6 class="mb-1">Doorstep Delivery</h6><p>Dreams Rent offers a fleet of high-quality </p></div>
 								</div>
 							</div>
-							<!-- /Feature Item -->
-
-							<!-- Feature Item -->
-							<div class="col-md-6 d-flex">
-								<div class="feature-item flex-fill">
-
-									<span class="feature-icon">
-										<i class="bx bxs-car-mechanic"></i>
-									</span>
-									<div>
-										<h6 class="mb-1">Latest Cars</h6>
-										<p>Dreams Rent offers a fleet of high-quality</p>
-									</div>
-								</div>
-							</div>
-							<!-- /Feature Item -->
-
-							<!-- Feature Item -->
-							<div class="col-md-6 d-flex">
-								<div class="feature-item flex-fill">
-									<span class="feature-icon">
-										<i class="bx bx-support"></i>
-									</span>
-									<div>
-										<h6 class="mb-1">Customer Support</h6>
-										<p>Dreams Rent offers a fleet of high-quality</p>
-									</div>
-								</div>
-							</div>
-							<!-- /Feature Item -->
-
-							<!-- Feature Item -->
-							<div class="col-md-6 d-flex">
-								<div class="feature-item flex-fill">
-									<span class="feature-icon">
-										<i class="bx bxs-coin"></i>
-									</span>
-									<div>
-										<h6 class="mb-1">No Hidden Charges</h6>
-										<p>Dreams Rent offers a fleet of high-quality</p>
-									</div>
-								</div>
-							</div>
-							<!-- /Feature Item -->
+							@endforelse
 
 						</div>
 					</div>
@@ -225,8 +187,13 @@
 			<div class="container">	
 
 				<div class="section-heading heading-four" data-aos="fade-down">
-					<h2>Explore Most Popular Cars</h2>
-					<p>Here's a list of some of the most popular cars globally</p>
+					@if(isset($settings['car']))
+						<h2>{{ $settings['car']->title }}</h2>
+						<p>{{ $settings['car']->description }}</p>
+					@else
+						<h2>Explore Most Popular Cars</h2>
+						<p>Here's a list of some of the most popular cars globally</p>
+					@endif
 				</div>
 
 				<div class="row">
@@ -311,10 +278,21 @@
 		<section class="brand-section">
 			<div class="container">	
 				<div class="section-heading heading-four" data-aos="fade-down">
-					<h2 class="text-white">Rent by Brands</h2>
-					<p>Here's a list of some of the most popular cars globally</p>
+					@if(isset($settings['brand']))
+						<h2 class="text-white">{{ $settings['brand']->title }}</h2>
+						<p>{{ $settings['brand']->description }}</p>
+					@else
+						<h2 class="text-white">Rent by Brands</h2>
+						<p>Here's a list of some of the most popular cars globally</p>
+					@endif
 				</div>
 				<div class="brands-slider owl-carousel">
+					@forelse($brands as $brand)
+					<div class="brand-wrap">
+						<img src="{{ asset('storage/' . $brand->logo) }}" alt="{{ $brand->name }}" style="height: 50px; object-fit: contain;">
+						<p>{{ $brand->name }}</p>
+					</div>
+					@empty
 					<div class="brand-wrap">
 						<img src="images/brand-09.svg" alt="img">
 						<p>Chevrolet</p>
@@ -327,18 +305,7 @@
 						<img src="images/brand-11.svg" alt="img">
 						<p>Chevrolet</p>
 					</div>
-					<div class="brand-wrap">
-						<img src="images/brand-12.svg" alt="img">
-						<p>Chevrolet</p>
-					</div>
-					<div class="brand-wrap">
-						<img src="images/brand-13.svg" alt="img">
-						<p>Chevrolet</p>
-					</div>
-					<div class="brand-wrap">
-						<img src="images/brand-14.svg" alt="img">
-						<p>Chevrolet</p>
-					</div>
+					@endforelse
 				</div>
 				<div class="brand-img text-center">
 					<img src="images/brand.png" alt="img" class="img-fluid">
@@ -353,17 +320,26 @@
 				<div class="row align-items-center">
 					<div class="col-lg-7">
 						<div class="rental-img">
-							<img src="images/rent-car.png" alt="img" class="img-fluid">
-							<div class="grid-img">
+							@if(isset($settings['rental']) && $settings['rental']->image)
+								<img src="{{ asset('storage/' . $settings['rental']->image) }}" class="img-fluid" alt="img">
+							@else
+								<img src="images/rent-car.png" alt="img" class="img-fluid">
+							@endif
+							<!-- <div class="grid-img">
 								<img src="images/car-grid.png" alt="img" class="img-fluid">
-							</div>
+							</div> -->
 						</div>						
 					</div>
 					<div class="col-lg-5">
 						<div class="rental-content">
 							<div class="section-heading heading-four text-start" data-aos="fade-down">
-								<h2>Rent Our Cars in 3 Steps</h2>
-								<p>Check how it Works to Rent Cars in DreamsRent</p>
+								@if(isset($settings['rental']))
+									<h2>{{ $settings['rental']->title }}</h2>
+									<p>{{ $settings['rental']->description }}</p>
+								@else
+									<h2>Rent Our Cars in 3 Steps</h2>
+									<p>Check how it Works to Rent Cars in DreamsRent</p>
+								@endif
 							</div>
 							<div class="step-item d-flex align-items-center">
 								<span class="step-icon bg-primary me-3">
@@ -425,19 +401,51 @@
 				</div>
 			</div>
 		</section>
-		<!-- /Rental Section -->	
+		<!-- /Rental Section -->
 
 		<!-- Testimonial Section -->
 		<section class="testimonial-section">
 			<div class="container">	
 				<div class="section-heading heading-four" data-aos="fade-down">
-					<h2>Our Clients Feedback</h2>
-					<p>Provided by customers about their experience with a product or service.</p>
+					@if(isset($settings['testimonial']))
+						<h2>{{ $settings['testimonial']->title }}</h2>
+						<p>{{ $settings['testimonial']->description }}</p>
+					@else
+						<h2>Our Clients Feedback</h2>
+						<p>Provided by customers about their experience with a product or service.</p>
+					@endif
 				</div>
 
 				<div class="row row-gap-4 justify-content-center">
-
+					@forelse($testimonials as $testimonial)
 					<!-- Testimonial Item -->
+					<div class="col-lg-4 col-md-6 d-flex">
+						<div class="testimonial-item testimonial-item-two flex-fill">
+							<div class="user-img">
+								@if($testimonial->photo)
+									<img src="{{ asset('storage/' . $testimonial->photo) }}" class="img-fluid" alt="{{ $testimonial->name }}">
+								@else
+									<img src="images/avatar-02.jpg" class="img-fluid" alt="img">
+								@endif
+							</div>
+							<p>{{ Str::limit($testimonial->content, 100) }}</p>							
+							<div class="rating">
+								@for($i = 0; $i < $testimonial->rating; $i++)
+									<i class="fas fa-star filled"></i>
+								@endfor
+								@for($i = $testimonial->rating; $i < 5; $i++)
+									<i class="fas fa-star"></i>
+								@endfor
+							</div>
+							<div class="user-info">
+								<h6>{{ $testimonial->name }}</h6>
+								<p>{{ $testimonial->location }}</p>												
+							</div>
+						</div>
+					</div>
+					<!-- /Testimonial Item -->
+					@empty
+					<!-- Fallback Static Testimonial -->
 					<div class="col-lg-4 col-md-6 d-flex">
 						<div class="testimonial-item testimonial-item-two flex-fill">
 							<div class="user-img">
@@ -457,51 +465,7 @@
 							</div>
 						</div>
 					</div>
-					<!-- /Testimonial Item -->
-
-					<!-- Testimonial Item -->
-					<div class="col-lg-4 col-md-6 d-flex">
-						<div class="testimonial-item testimonial-item-two flex-fill">
-							<div class="user-img">
-								<img src="images/avatar-18.jpg" class="img-fluid" alt="img">
-							</div>
-							<p>Their wide selection of vehicles, convenient locations, and competitive prices</p>							
-							<div class="rating">
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-							</div>
-							<div class="user-info">
-								<h6>Hardley Vanessa</h6>
-								<p>Newyork, USA</p>												
-							</div>
-						</div>
-					</div>
-					<!-- /Testimonial Item -->
-
-					<!-- Testimonial Item -->
-					<div class="col-lg-4 col-md-6 d-flex">
-						<div class="testimonial-item testimonial-item-two flex-fill">
-							<div class="user-img">
-								<img src="images/avatar-15.jpg" class="img-fluid" alt="img">
-							</div>
-							<p>The spacious SUV we rented comfortably fit our family and all our luggage</p>							
-							<div class="rating">
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-								<i class="fas fa-star filled"></i>
-							</div>
-							<div class="user-info">
-								<h6>Wilson</h6>
-								<p>Nevada, USA</p>												
-							</div>
-						</div>
-					</div>
-					<!-- /Testimonial Item -->
+					@endforelse
 
 				</div>
 
@@ -510,6 +474,11 @@
 				</div>
 
 				<div class="client-slider owl-carousel">
+					@forelse($rentalCommunities as $community)
+					<div class="p-2">
+						<img src="{{ asset('storage/' . $community->image) }}" alt="img" style="height: 100px; object-fit: cover; border-radius: 10px;">
+					</div>
+					@empty
 					<div>
 						<img src="images/client-01.svg" alt="img">
 					</div>
@@ -522,12 +491,7 @@
 					<div>
 						<img src="images/client-04.svg" alt="img">
 					</div>
-					<div>
-						<img src="images/client-05.svg" alt="img">
-					</div>
-					<div>
-						<img src="images/client-06.svg" alt="img">
-					</div>
+					@endforelse
 				</div>
 			</div>
 		</section>
@@ -537,13 +501,37 @@
 		<section class="blog-section-four">
 			<div class="container">	
 				<div class="section-heading heading-four" data-aos="fade-down">
-					<h2>Insights and Innovations</h2>
-					<p>Dive into our articles to stay ahead in the fast-paced world of technology.</p>
+					@if(isset($settings['article']))
+						<h2>{{ $settings['article']->title }}</h2>
+						<p>{{ $settings['article']->description }}</p>
+					@else
+						<h2>Insights and Innovations</h2>
+						<p>Dive into our articles to stay ahead in the fast-paced world of technology.</p>
+					@endif
 				</div>
 
 				<div class="row row-gap-3 justify-content-center">
-
+					@forelse($articles as $article)
 					<!-- Blog Item -->
+					<div class="col-lg-4 col-md-6 d-flex">
+						<div class="blog-item flex-fill">
+							<div class="blog-img">
+								<a href="javascript:void(0);">
+									<img src="{{ asset('storage/' . $article->image) }}" class="img-fluid" alt="img" style="width: 100%; height: 250px; object-fit: cover;">
+								</a>
+							</div>
+							<div class="blog-content">
+								<div class="d-flex align-center justify-content-between blog-category">
+									<a href="javascript:void(0);" class="category">{{ $article->category }}</a>
+									<p class="date d-inline-flex align-center"><i class="bx bx-calendar me-1"></i>{{ $article->published_at ? $article->published_at->format('F d, Y') : '' }}</p>
+								</div>
+								<h5 class="title"><a href="javascript:void(0);">{{ $article->title }}</a></h5>
+							</div>
+						</div>
+					</div>
+					<!-- /Blog Item -->
+					@empty
+					<!-- Fallback Static Blog -->
 					<div class="col-lg-4 col-md-6 d-flex">
 						<div class="blog-item flex-fill">
 							<div class="blog-img">
@@ -558,47 +546,13 @@
 							</div>
 						</div>
 					</div>
-					<!-- /Blog Item -->
-
-					<!-- Blog Item -->
-					<div class="col-lg-4 col-md-6 d-flex">
-						<div class="blog-item flex-fill">
-							<div class="blog-img">
-								<img src="images/blog-12.jpg" class="img-fluid" alt="img">
-							</div>
-							<div class="blog-content">
-								<div class="d-flex align-center justify-content-between blog-category">
-									<a href="javascript:void(0);" class="category">Journey</a>
-									<p class="date d-inline-flex align-center"><i class="bx bx-calendar me-1"></i>October 7, 2022</p>
-								</div>
-								<h5 class="title"><a href="blog-details.html">The 2025 Ford F-150 Raptor – A First Look you need to know</a></h5>
-							</div>
-						</div>
-					</div>
-					<!-- /Blog Item -->
-
-					<!-- Blog Item -->
-					<div class="col-lg-4 col-md-6 d-flex">
-						<div class="blog-item flex-fill">
-							<div class="blog-img">
-								<img src="images/blog-13.jpg" class="img-fluid" alt="img">
-							</div>
-							<div class="blog-content">
-								<div class="d-flex align-center justify-content-between blog-category">
-									<a href="javascript:void(0);" class="category">Journey</a>
-									<p class="date d-inline-flex align-center"><i class="bx bx-calendar me-1"></i>October 8, 2022</p>
-								</div>
-								<h5 class="title"><a href="blog-details.html">The 2025 Ford F-150 Raptor – A First Look you need to know</a></h5>
-							</div>
-						</div>
-					</div>
-					<!-- /Blog Item -->
+					@endforelse
 
 				</div>
 
 				<div class="view-all-btn text-center aos" data-aos="fade-down">
-					<a href="blog-grid.html" class="btn btn-secondary d-inline-flex align-center">View More<i class="bx bx-right-arrow-alt ms-1"></i></a>
-				</div>				
+					<a href="blog-grid.html" class="btn btn-secondary d-inline-flex align-center">View More<i class="bi bi-arrow-right ms-1"></i></a>
+				</div>	
 
 			</div>
 		</section>
@@ -610,82 +564,42 @@
 				<div class="row">
 					<div class="col-lg-8 mx-auto">
 						<div class="section-heading heading-four" data-aos="fade-down">
-							<h2>Frequently asked questions</h2>
-							<p>Explore to learn more about how can empower your business</p>
+							@if(isset($settings['faq']))
+								<h2>{{ $settings['faq']->title }}</h2>
+								<p>{{ $settings['faq']->description }}</p>
+							@else
+								<h2>Frequently asked questions</h2>
+								<p>Explore to learn more about how can empower your business</p>
+							@endif
 						</div>				
 						<div class="accordion faq-accordion" id="faqAccordion">
+							@forelse($faqs as $index => $faq)
+							<div class="accordion-item">
+								<h2 class="accordion-header">
+									<button class="accordion-button {{ $index != 0 ? 'collapsed' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#faq{{ $faq->id }}" aria-expanded="{{ $index == 0 ? 'true' : 'false' }}" aria-controls="faq{{ $faq->id }}">
+										{{ $faq->question }}
+									</button>
+								</h2>
+								<div id="faq{{ $faq->id }}" class="accordion-collapse collapse {{ $index == 0 ? 'show' : '' }}" data-bs-parent="#faqAccordion">
+									<div class="accordion-body">
+										<p>{{ $faq->answer }}</p>
+									</div>
+								</div>
+							</div>
+							@empty
 							<div class="accordion-item">
 								<h2 class="accordion-header">
 									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqOne" aria-expanded="true" aria-controls="faqOne">
 										How old do I need to be to rent a car?
 									</button>
 								</h2>
-								<div id="faqOne" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+								<div id="faqOne" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
 									<div class="accordion-body">
 										<p>You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
 									</div>
 								</div>
 							</div>
-							<div class="accordion-item">
-								<h2 class="accordion-header">
-									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqTwo" aria-expanded="true" aria-controls="faqTwo">
-										What documents do I need to rent a car?
-									</button>
-								</h2>
-								<div id="faqTwo" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-									<div class="accordion-body">
-										<p>You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-									</div>
-								</div>
-							</div>
-							<div class="accordion-item">
-								<h2 class="accordion-header">
-									<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqThree" aria-expanded="true" aria-controls="faqThree">
-										What types of vehicles are available for rent?
-									</button>
-								</h2>
-								<div id="faqThree" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
-									<div class="accordion-body">
-										<p>You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-									</div>
-								</div>
-							</div>
-							<div class="accordion-item">
-								<h2 class="accordion-header">
-									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqFour" aria-expanded="true" aria-controls="faqFour">
-										Can I rent a car with a debit card?
-									</button>
-								</h2>
-								<div id="faqFour" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-									<div class="accordion-body">
-										<p>You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-									</div>
-								</div>
-							</div>
-							<div class="accordion-item">
-								<h2 class="accordion-header">
-									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqFive" aria-expanded="true" aria-controls="faqFive">
-										What is your fuel policy?
-									</button>
-								</h2>
-								<div id="faqFive" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-									<div class="accordion-body">
-										<p>You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-									</div>
-								</div>
-							</div>
-							<div class="accordion-item">
-								<h2 class="accordion-header">
-									<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqSix" aria-expanded="true" aria-controls="faqSix">
-										Can I add additional drivers to my rental agreement?
-									</button>
-								</h2>
-								<div id="faqSix" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
-									<div class="accordion-body">
-										<p>You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-									</div>
-								</div>
-							</div>
+							@endforelse
 						</div>
 					</div>
 				</div>
