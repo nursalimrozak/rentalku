@@ -1878,6 +1878,7 @@ Version      : 1.0
   background: transparent;
   position: fixed;
   box-shadow: none;
+  z-index: 1040;
 }
 @media (max-width: 991.98px) {
   .header.header-four {
@@ -2952,7 +2953,7 @@ Version      : 1.0
 -----------------------*/
 .breadcrumb-bar {
   background: #201F1D;
-  padding: 60px 0 60px;
+  padding: 150px 0 60px;
   position: relative;
   z-index: 1;
   width: 100%;

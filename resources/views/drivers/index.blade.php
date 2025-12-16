@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('main-class', 'listing-page')
-@section('header-class', 'header-two')
+
 
 @section('content')
 	<!-- Breadscrumb Section -->
@@ -118,3 +118,14 @@
 	</section>	
 	<!-- /Drivers Grid View -->	
 @endsection
+
+@push('scripts')
+<script>
+    $(window).scroll(function () {
+        var sticky = $('.header-four'),
+            scroll = $(window).scrollTop();
+        if (scroll >= 150) sticky.addClass('header-fixed');
+        else sticky.removeClass('header-fixed');
+    });
+</script>
+@endpush

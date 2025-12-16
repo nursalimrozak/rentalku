@@ -13,12 +13,12 @@
 		<div class="container">
 			<div class="row align-items-center text-center">
 				<div class="col-md-12 col-12">
-					<h2 class="breadcrumb-title">Car Listings</h2>
+					<h2 class="breadcrumb-title">List Kendaraan</h2>
 					<nav aria-label="breadcrumb" class="page-breadcrumb">
 						<ol class="breadcrumb">
 							<li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
-							<li class="breadcrumb-item"><a href="javascript:void(0);">Listings</a></li>
-							<li class="breadcrumb-item active" aria-current="page">Car Listings</li>
+							<li class="breadcrumb-item"><a href="javascript:void(0);">List</a></li>
+							<li class="breadcrumb-item active" aria-current="page">List Kendaraan</li>
 						</ol>
 					</nav>							
 				</div>
@@ -338,4 +338,13 @@
 	<!-- Sticky Sidebar JS -->
 	<script src="{{ asset('js/ResizeSensor.js') }}"></script>
 	<script src="{{ asset('js/theia-sticky-sidebar.js') }}"></script>
+	
+	<script>
+		$(window).scroll(function () {
+			var sticky = $('.header-four'),
+				scroll = $(window).scrollTop();
+			if (scroll >= 150) sticky.addClass('header-fixed');
+			else sticky.removeClass('header-fixed');
+		});
+	</script>
 @endpush

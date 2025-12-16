@@ -138,3 +138,14 @@
     }
 </style>
 @endpush
+
+@push('scripts')
+<script>
+    $(window).scroll(function () {
+        var sticky = $('.header-four'),
+            scroll = $(window).scrollTop();
+        if (scroll >= 150) sticky.addClass('header-fixed');
+        else sticky.removeClass('header-fixed');
+    });
+</script>
+@endpush
