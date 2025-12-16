@@ -71,3 +71,4 @@ Route::middleware(['auth'])->group(function () {
 Route::resource('admin/rental-steps', App\Http\Controllers\Admin\RentalStepController::class, ['as' => 'admin']);
 
 Route::get('/list-artikel', [App\Http\Controllers\BlogController::class, 'index'])->name('public.articles.index');
+Route::get('/list-artikel/{article:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('public.articles.show');

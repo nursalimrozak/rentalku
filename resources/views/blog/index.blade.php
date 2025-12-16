@@ -31,7 +31,7 @@
                     <div class="col-lg-6 col-md-6 d-lg-flex">
                         <div class="blog grid-blog flex-fill"> 
                             <div class="blog-image">
-                                <a href="#">
+                                <a href="{{ route('public.articles.show', $article->slug) }}">
                                     @if($article->image)
                                         <img class="img-fluid" src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" style="height: 250px; width: 100%; object-fit: cover;">
                                     @else
@@ -43,7 +43,7 @@
                                 <p class="blog-category">
                                     <a href="javascript:void(0)"><span>{{ $article->category }}</span></a>
                                 </p>
-                                <h3 class="blog-title"><a href="#">{{ $article->title }}</a></h3>
+                                <h3 class="blog-title"><a href="{{ route('public.articles.show', $article->slug) }}">{{ $article->title }}</a></h3>
                                 <p class="blog-description">{{ Str::limit(strip_tags($article->content), 100) }}</p>
                                 <ul class="meta-item">
                                     <li>
@@ -56,7 +56,7 @@
                                     </li>
                                     <li class="date-icon"><i class="fa-solid fa-calendar-days"></i> <span>{{ $article->published_at ? $article->published_at->format('M d, Y') : 'N/A' }}</span></li>
                                 </ul>
-                                <a href="#" class="viewlink btn btn-primary">Read More <i class="feather-arrow-right ms-2"></i></a>
+                                <a href="{{ route('public.articles.show', $article->slug) }}" class="viewlink btn btn-primary">Read More <i class="feather-arrow-right ms-2"></i></a>
                             </div>
                         </div>
                     </div>
