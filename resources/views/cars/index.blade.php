@@ -245,7 +245,7 @@
                                             </div>
                                         @endif
                                     @endif
-									<a href="{{ route('car.details', $car->id) }}">
+									<a href="{{ route('car.details', array_merge(['car' => $car->id], request()->query())) }}">
 										@if($car->photo)
 											<img src="{{ asset($car->photo) }}" class="img-fluid" alt="{{ $car->name }}" style="height: 250px; object-fit: cover; width: 100%;">
 										@else
@@ -267,7 +267,7 @@
 									<div class="listing-features d-flex align-items-end justify-content-between">
 										<div class="list-rating">
 											<h3 class="listing-title">
-												<a href="{{ route('car.details', $car->id) }}">{{ $car->name }}</a>
+												<a href="{{ route('car.details', array_merge(['car' => $car->id], request()->query())) }}">{{ $car->name }}</a>
 											</h3>																	  
 											<div class="list-rating">							
 												<i class="fas fa-star filled"></i>
@@ -308,7 +308,7 @@
 											<h6>Rp {{ number_format($car->rental_rate_per_day, 0, ',', '.') }} <span>/ Day</span></h6>
 										</div>
 										<div class="listing-button">
-											<a href="{{ route('car.details', $car->id) }}" class="btn btn-order"><span><i class="feather-calendar me-2"></i></span>Rent Now</a>
+											<a href="{{ route('car.details', array_merge(['car' => $car->id], request()->query())) }}" class="btn btn-order"><span><i class="feather-calendar me-2"></i></span>Rent Now</a>
 										</div>	
 									</div>
 								</div>

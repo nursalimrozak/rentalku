@@ -111,7 +111,11 @@
                     <div class="detail-product">
                         <div class="pro-info">
                             <div class="pro-badge">
-                                <span class="badge-km"><i class="fa-solid fa-person-walking"></i>Status: Available</span>
+                                @if($car->status == 'Available')
+                                    <span class="badge-km"><i class="fa-solid fa-check-circle me-2"></i>Status: Tersedia</span>
+                                @else
+                                    <span class="badge-km" style="background: #dc3545; color: #fff;"><i class="fa-solid fa-circle-xmark me-2"></i>Status: Tidak Tersedia</span>
+                                @endif
                                 <a href="javascript:void(0);" class="fav-icon"><i class="fa-regular fa-heart"></i></a>
                             </div>
                             <ul>
@@ -361,13 +365,17 @@
                                     @if(auth()->user()->is_verified)
                                         <hr>
                                         <!-- Dates & Times -->
+                                        @php
+                                            $startTimeValue = request('pickup_time', '');
+                                            $endTimeValue = request('return_time', '');
+                                        @endphp
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="input-block mb-3">
                                                     <label>Start Date</label>
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="date" name="start_date" class="form-control" required>
+                                                            <input type="date" name="start_date" class="form-control" value="{{ $pickupDateStr }}" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -375,7 +383,7 @@
                                                     <label>Start Time</label>
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="time" name="start_time" class="form-control" required>
+                                                            <input type="time" name="start_time" class="form-control" value="{{ $startTimeValue }}" required>
                                                             <span class="form-icon" style="pointer-events: none;">
                                                                 <i class="fa-regular fa-clock"></i>
                                                             </span>
@@ -388,7 +396,7 @@
                                                     <label>End Date</label>
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="date" name="end_date" class="form-control" required>
+                                                            <input type="date" name="end_date" class="form-control" value="{{ $returnDateStr }}" required>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -396,7 +404,7 @@
                                                     <label>End Time</label>
                                                     <div class="group-img">
                                                         <div class="form-wrap">
-                                                            <input type="time" name="end_time" class="form-control" required>
+                                                            <input type="time" name="end_time" class="form-control" value="{{ $endTimeValue }}" required>
                                                             <span class="form-icon" style="pointer-events: none;">
                                                                 <i class="fa-regular fa-clock"></i>
                                                             </span>
@@ -476,9 +484,20 @@
                                         </div>
 
                                         <div class="input-block mb-0 mt-3">
-                                            <div class="search-btn">
-                                                <button type="submit" class="btn btn-primary check-available w-100">Book Now</button>
-                                            </div>
+                                            @if($car->status == 'Available')
+                                                <div class="search-btn">
+                                                    <button type="submit" class="btn btn-primary check-available w-100">Book Now</button>
+                                                </div>
+                                            @else
+                                                <div class="alert alert-warning text-center" role="alert">
+                                                    <i class="feather-alert-triangle me-2"></i>
+                                                    <strong>Mobil Tidak Tersedia</strong><br>
+                                                    Mobil ini sedang tidak tersedia. Silakan pilih kendaraan lain.
+                                                </div>
+                                                <div class="search-btn">
+                                                    <button type="button" class="btn btn-secondary w-100" disabled>Tidak Tersedia</button>
+                                                </div>
+                                            @endif
                                         </div>
                                         
                                         @if($errors->any())

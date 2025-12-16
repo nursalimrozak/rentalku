@@ -22,10 +22,14 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrapFive();
         
-        // Share settings with all views
-        view()->composer('*', function ($view) {
-            $view->with('appSettings', \App\Models\Setting::all()->pluck('value', 'key'));
-            $view->with('footerColumns', \App\Models\FooterColumn::with('links')->orderBy('order')->get()); // Add Footer Columns
+        // Share settings with all views using composer for reliability
+        view()->composer(['layouts.app', 'layouts.customer', 'layouts.admin', 'welcome'], function ($view) {
+            if (!$view->offsetExists('appSettings')) {
+                $view->with('appSettings', \App\Models\Setting::all()->pluck('value', 'key'));
+            }
+            if (!$view->offsetExists('footerColumns')) {
+                $view->with('footerColumns', \App\Models\FooterColumn::with('links')->orderBy('order')->get());
+            }
         });
     }
 }

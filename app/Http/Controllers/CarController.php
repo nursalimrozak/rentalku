@@ -38,6 +38,25 @@ class CarController extends Controller
 
     public function show(\App\Models\Car $car)
     {
-        return view('car_details', compact('car'));
+        // Get selected dates from request for availability check
+        // Using Carbon::parse to match index method logic exactly
+        $pickupDate = request()->filled('pickup_date') && request()->filled('pickup_time')
+            ? \Carbon\Carbon::parse(request()->pickup_date . ' ' . request()->pickup_time)
+            : null;
+            
+        $returnDate = request()->filled('return_date') && request()->filled('return_time')
+            ? \Carbon\Carbon::parse(request()->return_date . ' ' . request()->return_time)
+            : null;
+
+        if ($pickupDate && $returnDate) {
+            // Override status with dynamic calculation
+            $car->status = ucfirst($car->getAvailabilityStatus($pickupDate, $returnDate));
+        }
+
+        $pickupDateStr = $pickupDate ? $pickupDate->format('Y-m-d') : null;
+        $returnDateStr = $returnDate ? $returnDate->format('Y-m-d') : null;
+
+        return view('car_details', compact('car', 'pickupDateStr', 'returnDateStr'));
     }
+
 }
