@@ -16,40 +16,18 @@
 									<h1>Explore our <span>Verified & Professional</span> Cars</h1>
 									<p>Modern design sports cruisers for those who crave adventure & grandeur Cars for relaxing with your loved ones.</p>
 								@endif
-								<div class="customer-list">
-									<div class="users-wrap">
-										<ul class="users-list">
-											<li>
-												<img src="images/avatar-11.jpg" class="img-fluid aos" alt="bannerimage">
-											</li>
-											<li>
-												<img src="images/avatar-15.jpg" class="img-fluid aos" alt="bannerimage">
-											</li>
-											<li>
-												<img src="images/avatar-03.jpg" class="img-fluid aos" alt="bannerimage">
-											</li>
-										</ul>
-										<div class="customer-info">
-											<h4>6K + Customers</h4>
-											<p>has used our renting services </p>
-										</div>
-									</div>
-									<div class="view-all d-flex align-items-center gap-3">
-										<a href="{{ route('cars.index') }}" class="btn btn-primary d-inline-flex align-items-center">Rent a Car<i class="bx bx-right-arrow-alt ms-1"></i></a>
-										<a href="add-listing.html" class="btn btn-secondary d-inline-flex align-items-center"><i class="bx bxs-plus-circle me-1"></i>Add Your Car</a>
-									</div>
-								</div>	
+
 							</div>	
 					   	</div>
 						<div class="col-lg-7">							
 							<div class="banner-image">
 								<div class="banner-img" data-aos="fade-down">
-									<div class="amount-icon">
+									<!-- <div class="amount-icon">
 										<span class="day-amt">
-											<p>Starts From</p>
-											<h6>$650 <span> /day</span></h6>
+											<p>Mulai dari</p>
+											<h6>Rp 250K <span> /hari</span></h6>
 										</span>
-									</div>
+									</div> -->
 									@if(isset($settings['banner']) && $settings['banner']->image)
 										<img src="{{ asset('storage/' . $settings['banner']->image) }}" class="img-fluid" alt="img">
 									@else
@@ -60,7 +38,7 @@
 						</div>
 				   	</div>
 			   	</div>	
-				<div class="banner-search">
+				<!-- <div class="banner-search">
 					   <form action="listing-grid.html" class="form-block d-flex align-items-center">
 						   <div class="search-input">
 							   <div class="input-block">
@@ -108,7 +86,7 @@
 							   <button class="btn btn-primary" type="submit"><i class="bx bx-search-alt"></i></button>
 						   </div>
 					   </form>
-				   </div>
+				   </div> -->
 		   	</div>
 		   	<div class="banner-bgs">
 		   		<img src="images/banner-bg-01.png" class="bg-01 img-fluid" alt="img">
@@ -341,9 +319,26 @@
 									<p>Check how it Works to Rent Cars in DreamsRent</p>
 								@endif
 							</div>
+
+							@php
+								$bgColors = ['bg-primary', 'bg-secondary-100', 'bg-dark'];
+							@endphp
+
+							@forelse($rentalSteps as $index => $step)
+							<div class="step-item d-flex align-items-center">
+								<span class="step-icon {{ $bgColors[$index % 3] }} me-3">
+									<i class="{{ $step->icon }}"></i>
+								</span>
+								<div>
+									<h5>{{ $step->title }}</h5>
+									<p>{{ $step->description }}</p>
+								</div>
+							</div>
+							@empty
+							<!-- Fallback Static Steps if No Data -->
 							<div class="step-item d-flex align-items-center">
 								<span class="step-icon bg-primary me-3">
-									<i class="bx bx-calendar-heart"></i>
+									<i class="bi bi-calendar-heart"></i>
 								</span>
 								<div>
 									<h5>Choose Date &  Locations</h5>
@@ -352,7 +347,7 @@
 							</div>
 							<div class="step-item d-flex align-items-center">
 								<span class="step-icon bg-secondary-100 me-3">
-									<i class="bx bxs-edit-location"></i>
+									<i class="bi bi-geo-alt-fill"></i>
 								</span>
 								<div>
 									<h5>Select Pick-Up & Drop Locations</h5>
@@ -361,13 +356,14 @@
 							</div>
 							<div class="step-item d-flex align-items-center">
 								<span class="step-icon bg-dark me-3">
-									<i class="bx bx-coffee-togo"></i>
+									<i class="bi bi-car-front-fill"></i>
 								</span>
 								<div>
 									<h5>Book your Car</h5>
 									<p>Determine the date & location for your car rental. Consider factors such as your travel itinerary, pickup/drop-off locations</p>
 								</div>
 							</div>
+							@endforelse
 						</div>
 					</div>
 				</div>

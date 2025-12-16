@@ -67,3 +67,5 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('rental-communities', App\Http\Controllers\Admin\RentalCommunityController::class);
     });
 });
+
+Route::resource('admin/rental-steps', App\Http\Controllers\Admin\RentalStepController::class, ['as' => 'admin']);

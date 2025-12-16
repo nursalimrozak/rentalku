@@ -239,11 +239,8 @@
 										<i class="ti ti-script-plus"></i><span>Extra Service</span>
 									</a>
 								</li>
-								<li>
-									<a href="{{ route('admin.seasonal-prices.index') }}">
-										<i class="ti ti-file-dollar"></i><span>Seasonal Pricing</span>
-									</a>
-								</li>
+
+
 								<li>
 									<a href="inspections.html">
 										<i class="ti ti-dice-6"></i><span>Inspections</span>
@@ -322,6 +319,11 @@
 								<li>
 									<a href="{{ route('admin.features.index') }}" class="{{ request()->routeIs('admin.features.*') ? 'active' : '' }}">
 										<i class="ti ti-list-check"></i><span>Features</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{ route('admin.rental-steps.index') }}" class="{{ request()->routeIs('admin.rental-steps.*') ? 'active' : '' }}">
+										<i class="ti ti-stairs-up"></i><span>Cara Rental</span>
 									</a>
 								</li>
 								<li>

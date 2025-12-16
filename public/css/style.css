@@ -10995,8 +10995,8 @@ Version      : 1.0
   box-shadow: none;
 }
 .faq-accordion.accordion .accordion-item .accordion-button::after {
-  content: "\eb8b";
-  font-family: boxicons;
+  content: "\f4fe";
+  font-family: "bootstrap-icons";
   background-image: none;
   width: 24px;
   height: 24px;
@@ -11009,7 +11009,7 @@ Version      : 1.0
   color: #fff;
 }
 .faq-accordion.accordion .accordion-item .accordion-button:not(.collapsed)::after {
-  content: "\ebc0";
+  content: "\f2e5";
   background: #fff;
   color: #111111;
 }

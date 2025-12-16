@@ -16,7 +16,8 @@ class LandingPageController extends Controller
         $articles = \App\Models\Article::whereNotNull('published_at')->latest('published_at')->take(3)->get();
         $cars = \App\Models\Car::latest()->limit(6)->get();
         $rentalCommunities = \App\Models\RentalCommunity::all();
+        $rentalSteps = \App\Models\RentalStep::all();
 
-        return view('welcome', compact('settings', 'brands', 'features', 'testimonials', 'faqs', 'articles', 'cars', 'rentalCommunities'));
+        return view('welcome', compact('settings', 'brands', 'features', 'testimonials', 'faqs', 'articles', 'cars', 'rentalCommunities', 'rentalSteps'));
     }
 }
