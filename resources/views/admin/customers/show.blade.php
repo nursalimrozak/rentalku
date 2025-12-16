@@ -107,7 +107,7 @@
                                          
                                          @if($doc)
                                              <div class="d-flex justify-content-between align-items-center mt-2">
-                                                 <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="btn btn-xs btn-outline-primary">View</a>
+                                                 <a href="{{ route('documents.show', $doc->id) }}" target="_blank" class="btn btn-xs btn-outline-primary">View</a>
                                                  
                                                  <div>
                                                      @if($doc->status != 'verified')

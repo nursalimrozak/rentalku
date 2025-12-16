@@ -57,7 +57,9 @@ class ProfileController extends Controller
         ]);
 
         $user = Auth::user();
-        $path = $request->file('document_file')->store('details/' . $user->id, 'public');
+        // Store in 'local' disk (storage/app/documents) for privacy
+        // Using 'documents' folder instead of 'details' to differentiate
+        $path = $request->file('document_file')->store('documents/' . $user->id, 'local');
 
         // Check if doc exists to update or create
         $user->documents()->updateOrCreate(

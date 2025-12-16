@@ -138,7 +138,7 @@
                                     
                                     @if($doc)
                                         <div class="mb-2">
-                                            <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" class="btn btn-sm btn-outline-info w-100 mb-1">View File</a>
+                                            <a href="{{ route('documents.show', $doc->id) }}" target="_blank" class="btn btn-sm btn-outline-info w-100 mb-1">View File</a>
                                         </div>
                                         @if($doc->status == 'rejected')
                                             <small class="text-danger d-block mb-2">Reason: {{ $doc->rejection_reason }}</small>
