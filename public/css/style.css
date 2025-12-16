@@ -1893,7 +1893,7 @@ Version      : 1.0
   }
 }
 .header.header-four .header-nav {
-  height: 79px;
+  height: 100px;
 }
 @media (max-width: 991.98px) {
   .header.header-four .header-nav {

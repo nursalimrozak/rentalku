@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('main-class', 'listing-page')
-@section('header-class', 'header-two')
+
 
 @push('styles')
 	<!-- Rangeslider CSS -->

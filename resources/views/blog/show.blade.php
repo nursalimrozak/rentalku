@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('header-class', 'header-one')
+
 
 @section('content')
 

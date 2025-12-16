@@ -45,6 +45,17 @@
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @stack('styles')
+	<!-- Custom CSS -->
+    <style>
+        .app-logo {
+            max-width: 50%;
+        }
+        @media (max-width: 768px) {
+            .app-logo {
+                max-width: 20%;
+            }
+        }
+    </style>
 </head>
 <body>
 	
@@ -62,18 +73,35 @@
 								<span></span>
 							</span>
 						</a>
-						<a href="index.html" class="navbar-brand logo">
-							<img src="{{ asset('images/logo-white.svg') }}" class="img-fluid white-logo" alt="Logo">
-							<img src="{{ asset('images/logo.svg') }}" class="img-fluid dark-logo" alt="Logo">
+						<a href="{{ route('home') }}" class="navbar-brand logo">
+                            @if(isset($appSettings['app_logo_white']))
+							    <img src="{{ asset('storage/' . $appSettings['app_logo_white']) }}" class="img-fluid white-logo app-logo" alt="Logo">
+                            @else
+							    <img src="{{ asset('images/logo-white.svg') }}" class="img-fluid white-logo app-logo" alt="Logo">
+                            @endif
+
+                            @if(isset($appSettings['app_logo']))
+							    <img src="{{ asset('storage/' . $appSettings['app_logo']) }}" class="img-fluid dark-logo app-logo" alt="Logo">
+                            @else
+							    <img src="{{ asset('images/logo.svg') }}" class="img-fluid dark-logo app-logo" alt="Logo">
+                            @endif
 						</a>
-						<a href="index.html" class="navbar-brand logo-small">
-							<img src="{{ asset('images/logo-small.png') }}" class="img-fluid" alt="Logo">
+						<a href="{{ route('home') }}" class="navbar-brand logo-small">
+                            @if(isset($appSettings['app_favicon']))
+							    <img src="{{ asset('storage/' . $appSettings['app_favicon']) }}" class="img-fluid" alt="Logo">
+                            @else
+							    <img src="{{ asset('images/logo-small.png') }}" class="img-fluid" alt="Logo">
+                            @endif
 						</a>					
 					</div>
 					<div class="main-menu-wrapper">
 						<div class="menu-header">
-							<a href="index.html" class="menu-logo">
-								<img src="{{ asset('images/logo.svg') }}" class="img-fluid" alt="Logo">
+							<a href="{{ route('home') }}" class="menu-logo">
+                                @if(isset($appSettings['app_logo']))
+								    <img src="{{ asset('storage/' . $appSettings['app_logo']) }}" class="img-fluid" alt="Logo">
+                                @else
+								    <img src="{{ asset('images/logo.svg') }}" class="img-fluid" alt="Logo">
+                                @endif
 							</a>
 							<a id="menu_close" class="menu-close" href="javascript:void(0);"> <i class="fas fa-times"></i></a>
 						</div>

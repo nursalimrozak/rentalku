@@ -307,6 +307,16 @@
 						<li>
 							<ul>
 								<li>
+									<a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+										<i class="ti ti-settings"></i><span>Application Settings</span>
+									</a>
+								</li>
+								<li>
+									<a href="{{ route('admin.footer.index') }}" class="{{ request()->routeIs('admin.footer.*') ? 'active' : '' }}">
+										<i class="ti ti-layout-bottombar"></i><span>Footer Manager</span>
+									</a>
+								</li>
+								<li>
 									<a href="{{ route('admin.section-settings.index') }}" class="{{ request()->routeIs('admin.section-settings.*') ? 'active' : '' }}">
 										<i class="ti ti-settings"></i><span>Section Settings</span>
 									</a>

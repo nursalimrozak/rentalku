@@ -65,10 +65,18 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('faqs', App\Http\Controllers\Admin\FaqController::class);
         Route::resource('articles', App\Http\Controllers\Admin\ArticleController::class);
         Route::resource('rental-communities', App\Http\Controllers\Admin\RentalCommunityController::class);
+        Route::resource('rental-steps', App\Http\Controllers\Admin\RentalStepController::class);
+        
+        // Settings
+        Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
+        Route::post('/settings', [App\Http\Controllers\Admin\SettingController::class, 'update'])->name('settings.update');
+
+        // Footer
+        Route::resource('footer', App\Http\Controllers\Admin\FooterController::class);
+        Route::post('/footer/{column}/links', [App\Http\Controllers\Admin\FooterController::class, 'storeLink'])->name('footer.links.store');
+        Route::delete('/footer/links/{link}', [App\Http\Controllers\Admin\FooterController::class, 'destroyLink'])->name('footer.links.destroy');
     });
 });
-
-Route::resource('admin/rental-steps', App\Http\Controllers\Admin\RentalStepController::class, ['as' => 'admin']);
 
 Route::get('/list-artikel', [App\Http\Controllers\BlogController::class, 'index'])->name('public.articles.index');
 Route::get('/list-artikel/{article:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('public.articles.show');
