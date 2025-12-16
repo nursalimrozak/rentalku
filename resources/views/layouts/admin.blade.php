@@ -3,10 +3,14 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-	<title>RentalKu - Admin Dashboard</title>
+	<title>{{ $appSettings['meta_title'] ?? $appSettings['app_name'] ?? 'RentalKu' }} - Admin Dashboard</title>
 	
 	<!-- Favicon -->
-	<link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin_assets/images/favicon.png') }}">
+	@if(isset($appSettings['app_favicon']))
+		<link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/' . $appSettings['app_favicon']) }}">
+	@else
+		<link rel="shortcut icon" type="image/x-icon" href="{{ asset('admin_assets/images/favicon.png') }}">
+	@endif
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="{{ asset('admin_assets/css/bootstrap.min.css') }}">
@@ -35,10 +39,18 @@
 			
 				<div class="header-left">
 					<a href="{{ route('dashboard') }}" class="logo">
-						<img src="{{ asset('admin_assets/images/logo.svg') }}" alt="Logo">
+						@if(isset($appSettings['app_logo']))
+							<img src="{{ asset('storage/' . $appSettings['app_logo']) }}" class="img-fluid" alt="Logo">
+						@else
+							<img src="{{ asset('admin_assets/images/logo.svg') }}" alt="Logo">
+						@endif
 					</a>
 					<a href="{{ route('dashboard') }}" class="dark-logo">
-						<img src="{{ asset('admin_assets/images/logo-white.svg') }}" alt="Logo">
+						@if(isset($appSettings['app_logo_white']))
+							<img src="{{ asset('storage/' . $appSettings['app_logo_white']) }}" class="img-fluid" alt="Logo">
+						@else
+							<img src="{{ asset('admin_assets/images/logo-white.svg') }}" alt="Logo">
+						@endif
 					</a>
 				</div>
 
@@ -124,13 +136,25 @@
 			<!-- Logo -->
 			<div class="sidebar-logo">
 				<a href="{{ route('dashboard') }}" class="logo logo-normal">
-					<img src="{{ asset('admin_assets/images/logo.svg') }}" alt="Logo">
+					@if(isset($appSettings['app_logo']))
+						<img src="{{ asset('storage/' . $appSettings['app_logo']) }}" class="img-fluid" alt="Logo">
+					@else
+						<img src="{{ asset('admin_assets/images/logo.svg') }}" alt="Logo">
+					@endif
 				</a>
 				<a href="{{ route('dashboard') }}" class="logo-small">
-					<img src="{{ asset('admin_assets/images/logo-small.svg') }}" alt="Logo">
+					@if(isset($appSettings['app_favicon']))
+						<img src="{{ asset('storage/' . $appSettings['app_favicon']) }}" class="img-fluid" alt="Logo">
+					@else
+						<img src="{{ asset('admin_assets/images/logo-small.svg') }}" alt="Logo">
+					@endif
 				</a>
 				<a href="{{ route('dashboard') }}" class="dark-logo">
-					<img src="{{ asset('admin_assets/images/logo-white.svg') }}" alt="Logo">
+					@if(isset($appSettings['app_logo_white']))
+						<img src="{{ asset('storage/' . $appSettings['app_logo_white']) }}" class="img-fluid" alt="Logo">
+					@else
+						<img src="{{ asset('admin_assets/images/logo-white.svg') }}" alt="Logo">
+					@endif
 				</a>
 			</div>
 			<!-- /Logo -->
@@ -599,156 +623,6 @@
 										</li>
 										<li>
 											<a href="system-update.html">System Update</a>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-						<li class="menu-title"><span>UI Interface</span></li>
-						<li>
-							<ul>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-hierarchy"></i><span>Base UI</span><span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="ui-alerts.html">Alerts</a></li>
-										<li><a href="ui-accordion.html">Accordion</a></li>
-										<li><a href="ui-avatar.html">Avatar</a></li>
-										<li><a href="ui-badges.html">Badges</a></li>
-										<li><a href="ui-borders.html">Border</a></li>
-										<li><a href="ui-buttons.html">Buttons</a></li>
-										<li><a href="ui-buttons-group.html">Button Group</a></li>
-										<li><a href="ui-breadcrumb.html">Breadcrumb</a></li>
-										<li><a href="ui-cards.html">Card</a></li>
-										<li><a href="ui-carousel.html">Carousel</a></li>
-										<li><a href="ui-colors.html">Colors</a></li>
-										<li><a href="ui-dropdowns.html">Dropdowns</a></li>
-										<li><a href="ui-grid.html">Grid</a></li>
-										<li><a href="ui-images.html">Images</a></li>
-										<li><a href="ui-lightbox.html">Lightbox</a></li>
-										<li><a href="ui-media.html">Media</a></li>
-										<li><a href="ui-modals.html">Modals</a></li>
-										<li><a href="ui-offcanvas.html">Offcanvas</a></li>
-										<li><a href="ui-pagination.html">Pagination</a></li>
-										<li><a href="ui-popovers.html">Popovers</a></li>
-										<li><a href="ui-progress.html">Progress</a></li>
-										<li><a href="ui-placeholders.html">Placeholders</a></li>
-										<li><a href="ui-spinner.html">Spinner</a></li>
-										<li><a href="ui-sweetalerts.html">Sweet Alerts</a></li>
-										<li><a href="ui-nav-tabs.html">Tabs</a></li>
-										<li><a href="ui-toasts.html">Toasts</a></li>
-										<li><a href="ui-tooltips.html">Tooltips</a></li>
-										<li><a href="ui-typography.html">Typography</a></li>
-										<li><a href="ui-video.html">Video</a></li>
-										<li><a href="ui-sortable.html">Sortable</a></li>
-										<li><a href="ui-swiperjs.html">Swiperjs</a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-whirl"></i><span>Advanced UI</span><span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="ui-ribbon.html">Ribbon</a></li>
-										<li><a href="ui-clipboard.html">Clipboard</a></li>
-										<li><a href="ui-drag-drop.html">Drag & Drop</a></li>
-										<li><a href="ui-rangeslider.html">Range Slider</a></li>
-										<li><a href="ui-rating.html">Rating</a></li>
-										<li><a href="ui-text-editor.html">Text Editor</a></li>
-										<li><a href="ui-counter.html">Counter</a></li>
-										<li><a href="ui-scrollbar.html">Scrollbar</a></li>
-										<li><a href="ui-stickynote.html">Sticky Note</a></li>
-										<li><a href="ui-timeline.html">Timeline</a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-forms"></i><span>Forms</span><span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li class="submenu submenu-two">
-											<a href="javascript:void(0);">Form Elements<span class="menu-arrow inside-submenu"></span></a>
-											<ul>
-												<li><a href="form-basic-inputs.html">Basic Inputs</a></li>
-												<li><a href="form-checkbox-radios.html">Checkbox & Radios</a></li>
-												<li><a href="form-input-groups.html">Input Groups</a></li>
-												<li><a href="form-grid-gutters.html">Grid & Gutters</a></li>
-												<li><a href="form-select.html">Form Select</a></li>
-												<li><a href="form-mask.html">Input Masks</a></li>
-												<li><a href="form-fileupload.html">File Uploads</a></li>
-											</ul>
-										</li>
-										<li class="submenu submenu-two">
-											<a href="javascript:void(0);">Layouts<span class="menu-arrow inside-submenu"></span></a>
-											<ul>
-												<li><a href="form-horizontal.html">Horizontal Form</a></li>
-												<li><a href="form-vertical.html">Vertical Form</a></li>
-												<li><a href="form-floating-labels.html">Floating Labels</a></li>
-											</ul>
-										</li>
-										<li><a href="form-validation.html">Form Validation</a></li>
-										<li><a href="form-select2.html">Select2</a></li>
-										<li><a href="form-wizard.html">Form Wizard</a></li>
-										<li><a href="form-pickers.html">Form Picker</a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-table"></i><span>Tables</span><span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="tables-basic.html">Basic Tables </a></li>
-										<li><a href="data-tables.html">Data Table </a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-chart-pie-3"></i>
-										<span>Charts</span><span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="chart-apex.html">Apex Charts</a></li>
-										<li><a href="chart-c3.html">Chart C3</a></li>
-										<li><a href="chart-js.html">Chart Js</a></li>
-										<li><a href="chart-morris.html">Morris Charts</a></li>
-										<li><a href="chart-flot.html">Flot Charts</a></li>
-										<li><a href="chart-peity.html">Peity Charts</a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-icons"></i>
-										<span>Icons</span><span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li><a href="icon-fontawesome.html">Fontawesome Icons</a></li>
-										<li><a href="icon-tabler.html">Tabler Icons</a></li>
-										<li><a href="icon-bootstrap.html">Bootstrap Icons</a></li>
-										<li><a href="icon-remix.html">Remix Icons</a></li>
-										<li><a href="icon-feather.html">Feather Icons</a></li>
-										<li><a href="icon-ionic.html">Ionic Icons</a></li>
-										<li><a href="icon-material.html">Material Icons</a></li>
-										<li><a href="icon-pe7.html">Pe7 Icons</a></li>
-										<li><a href="icon-simpleline.html">Simpleline Icons</a></li>
-										<li><a href="icon-themify.html">Themify Icons</a></li>
-										<li><a href="icon-weather.html">Weather Icons</a></li>
-										<li><a href="icon-typicon.html">Typicon Icons</a></li>
-										<li><a href="icon-flag.html">Flag Icons</a></li>
-									</ul>
-								</li>
-								<li class="submenu">
-									<a href="javascript:void(0);">
-										<i class="ti ti-map-2"></i>
-										<span>Maps</span>
-										<span class="menu-arrow"></span>
-									</a>
-									<ul>
-										<li>
-											<a href="maps-vector.html">Vector</a>
-										</li>
-										<li>
-											<a href="maps-leaflet.html">Leaflet</a>
 										</li>
 									</ul>
 								</li>

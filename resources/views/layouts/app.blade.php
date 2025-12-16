@@ -3,10 +3,14 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0">
-	<title>Dreams Rent | Template</title>
+	<title>{{ $appSettings['meta_title'] ?? $appSettings['app_name'] ?? 'Dreams Rent' }}</title>
 
 	<!-- Favicon -->
-	<link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
+	@if(isset($appSettings['app_favicon']))
+		<link rel="shortcut icon" href="{{ asset('storage/' . $appSettings['app_favicon']) }}">
+	@else
+		<link rel="shortcut icon" href="{{ asset('images/favicon.png') }}">
+	@endif
 	
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
@@ -134,9 +138,25 @@
 							</li>
 						@endguest
 						@auth
-							<li class="nav-item">
-								<a class="nav-link header-login btn-primary text-white" href="{{ route('dashboard') }}">Dashboard</a>
-							</li>
+						<li class="nav-item dropdown has-arrow logged-item">
+							<a href="#" class="dropdown-toggle nav-link p-0" data-bs-toggle="dropdown">
+								<span class="user-img">
+									<img class="rounded-circle" src="{{ Auth::user()->profile_photo_path ? asset('storage/' . Auth::user()->profile_photo_path) : asset('customer_assets/images/user-06.jpg') }}" alt="Profile" style="width:36px; height:36px; object-fit:cover;">
+								</span>
+								<span class="user-text text-white ms-2">{{ Auth::user()->name }}</span>
+							</a>
+							<div class="dropdown-menu dropdown-menu-end">
+								<a class="dropdown-item" href="{{ route('dashboard') }}">
+									<i class="feather-user-check"></i> Dashboard
+								</a>
+								<a class="dropdown-item" href="javascript:void(0);" onclick="document.getElementById('logout-form-header').submit();">
+									<i class="feather-power"></i> Logout
+								</a>
+								<form id="logout-form-header" action="{{ route('logout') }}" method="POST" style="display: none;">
+									@csrf
+								</form>
+							</div>
+						</li>
 						@endauth
 					</ul>
 				</nav>
@@ -155,10 +175,14 @@
 						<div class="col-lg-5">
 							<div class="footer-contact footer-widget">
 								<div class="footer-logo">
-									<img src="{{ asset('images/logo-white.svg') }}" class="img-fluid aos" alt="logo">
+									@if(isset($appSettings['app_logo_white']))
+										<img src="{{ asset('storage/' . $appSettings['app_logo_white']) }}" class="img-fluid aos app-logo" alt="logo">
+									@else
+										<img src="{{ asset('images/logo-white.svg') }}" class="img-fluid aos app-logo" alt="logo">
+									@endif
 								</div>
 								<div class="footer-contact-info">
-									<p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. </p>
+									<p>{{ $appSettings['meta_description'] ?? 'We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles.' }}</p>
 								</div>	
 								<div class="d-flex align-items-center gap-1 app-icon">
 									<a href="javascript:void(0);">
@@ -169,98 +193,49 @@
 									</a>
 								</div>
 								<ul class="social-icon">
+									@if(isset($appSettings['social_facebook']))
 									<li>
-										<a href="javascript:void(0)"><i class="fa-brands fa-facebook-f"></i></a>
+										<a href="{{ $appSettings['social_facebook'] }}" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
 									</li>
+									@endif
+									@if(isset($appSettings['social_instagram']))
 									<li>
-										<a href="javascript:void(0)"><i class="fa-brands fa-instagram"></i></a>
+										<a href="{{ $appSettings['social_instagram'] }}" target="_blank"><i class="fa-brands fa-instagram"></i></a>
 									</li>
+									@endif
+									@if(isset($appSettings['social_linkedin']))
 									<li>
-										<a href="javascript:void(0)"><i class="fab fa-behance"></i></a>
+										<a href="{{ $appSettings['social_linkedin'] }}" target="_blank"><i class="fab fa-linkedin"></i></a>
 									</li>
+									@endif
+									@if(isset($appSettings['social_twitter']))
 									<li>
-										<a href="javascript:void(0)"><i class="fab fa-twitter"></i> </a>
+										<a href="{{ $appSettings['social_twitter'] }}" target="_blank"><i class="fab fa-twitter"></i> </a>
 									</li>
-									<li>
-										<a href="javascript:void(0)"><i class="fab fa-linkedin"></i></a>
-									</li>
+									@endif
 								</ul>
 							</div>
 						</div>
 						<div class="col-lg-7">
 							<div class="row">
-								<div class="col-lg-4 col-md-6">
-									<!-- Footer Widget -->
-									<div class="footer-widget footer-menu">
-										<h5 class="footer-title">Quick Links</h5>
-										<ul>
-											<li>
-												<a href="javascript:void(0)">My account</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Campaigns</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Dreams rent Dealers</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Deals and Incentive</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Financial Services</a>
-											</li>							
-										</ul>
+								@if(isset($footerColumns) && $footerColumns->count() > 0)
+									@foreach($footerColumns as $column)
+									<div class="col-lg-4 col-md-6">
+										<!-- Footer Widget -->
+										<div class="footer-widget footer-menu">
+											<h5 class="footer-title">{{ $column->title }}</h5>
+											<ul>
+												@foreach($column->links as $link)
+												<li>
+													<a href="{{ $link->url }}">{{ $link->label }}</a>
+												</li>
+												@endforeach
+											</ul>
+										</div>
+										<!-- /Footer Widget -->
 									</div>
-									<!-- /Footer Widget -->
-								</div>
-								<div class="col-lg-4 col-md-6">
-									<!-- Footer Widget -->
-									<div class="footer-widget footer-menu">
-										<h5 class="footer-title">Pages</h5>
-										<ul>
-											<li>
-												<a href="about-us.html">About Us</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Become a Partner</a>
-											</li>
-											<li>
-												<a href="faq.html">Faq’s</a>
-											</li>
-											<li>
-												<a href="testimonial.html">Testimonials</a>
-											</li>
-											<li>
-												<a href="contact-us.html">Contact Us</a>
-											</li>							
-										</ul>
-									</div>
-									<!-- /Footer Widget -->
-								</div>	
-								<div class="col-lg-4 col-md-6">
-									<!-- Footer Widget -->
-									<div class="footer-widget footer-menu">
-										<h5 class="footer-title">Useful Links</h5>
-										<ul>
-											<li>
-												<a href="javascript:void(0)">My account</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Campaigns</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Dreams rent Dealers</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Deals and Incentive</a>
-											</li>
-											<li>
-												<a href="javascript:void(0)">Financial Services</a>
-											</li>							
-										</ul>
-									</div>
-									<!-- /Footer Widget -->
-								</div>									
+									@endforeach
+								@endif
 							</div>							
 						</div>
 					</div>					
@@ -276,7 +251,7 @@
 						<div class="row align-items-center row-gap-3">
 							<div class="col-lg-4">
 								<div class="copyright-text">
-									<p>Copyright  2025 Dreams Rent. All Rights Reserved.</p>
+									<p>{{ $appSettings['footer_copyright'] ?? 'Copyright 2025 Dreams Rent. All Rights Reserved.' }}</p>
  								</div>
 							</div>
 							<div class="col-lg-4">

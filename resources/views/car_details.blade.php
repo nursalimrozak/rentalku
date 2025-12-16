@@ -170,7 +170,7 @@
                             <div class="row">
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-1.svg') }}" alt="Icon">
+                                        <i class="fa-solid fa-car-side fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Body </span>
@@ -179,7 +179,7 @@
                                 </div>
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-2.svg') }}" alt="Icon">
+                                        <i class="fa-solid fa-tag fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Brand </span>
@@ -188,7 +188,7 @@
                                 </div>
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-3.svg') }}" alt="Icon">
+                                        <i class="fa-solid fa-gears fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Transmission </span>
@@ -197,7 +197,7 @@
                                 </div>
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-4.svg') }}" alt="Icon">
+                                        <i class="fa-solid fa-gas-pump fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Fuel Type </span>
@@ -206,7 +206,7 @@
                                 </div>
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-7.svg') }}" alt="Icon">
+                                        <i class="fa-regular fa-calendar-days fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Year</span>
@@ -215,7 +215,7 @@
                                 </div>
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-10.svg') }}" alt="Icon">
+                                        <i class="fa-solid fa-door-open fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Door </span>
@@ -224,11 +224,20 @@
                                 </div>
                                 <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
                                     <div class="feature-img">
-                                        <img src="{{ asset('images/specification-icon-6.svg') }}" alt="Icon">
+                                        <i class="fa-solid fa-users fa-2x text-primary"></i>
                                     </div>
                                     <div class="featues-info">
                                         <span>Capacity </span>
                                         <h6>{{ $car->seating_capacity }} Persons</h6>
+                                    </div>
+                                </div>
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                    <div class="feature-img">
+                                        <i class="fa-solid fa-id-card fa-2x text-primary"></i>
+                                    </div>
+                                    <div class="featues-info">
+                                        <span>License Plate</span>
+                                        <h6>{{ $car->license_plate }}</h6>
                                     </div>
                                 </div>
                                 </div>
@@ -731,6 +740,16 @@
                 focusOnSelect: true
             });
         }
+
+        // Header Scroll
+        $(window).scroll(function() {
+            var scroll = $(window).scrollTop();
+            if (scroll >= 150) {
+                $(".header-four").addClass("header-fixed");
+            } else {
+                $(".header-four").removeClass("header-fixed");
+            }
+        });
     });
 </script>
 @endpush

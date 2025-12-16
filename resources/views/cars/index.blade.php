@@ -258,7 +258,10 @@
 											<i class="feather-heart"></i>
 										</a>										
 									</div>	
-									<span class="featured-text">{{ $car->brand }}</span>
+									<div class="featured-text-group d-flex gap-2" style="position: absolute; bottom: 15px; left: 15px; z-index: 10;">
+										<span class="featured-text position-static m-0">{{ $car->brand }}</span>
+										<span class="featured-text position-static m-0" style="background: #ff9f00; color: #fff;">{{ $car->license_plate }}</span>
+									</div>
 								</div>										
 								<div class="listing-content">
 									<div class="listing-features d-flex align-items-end justify-content-between">
