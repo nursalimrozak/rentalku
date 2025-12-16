@@ -84,4 +84,42 @@ class Car extends Model
 
         return !$hasBookingConflict && !$hasMaintenanceConflict;
     }
+
+    public function getAvailabilityStatus($startDate, $endDate)
+    {
+        // 1. Check Maintenance First (Maintenance overrides bookings generally, or should we say if under maintenance it's definitely maintenance)
+        $hasMaintenanceConflict = $this->maintenances()
+            ->whereIn('status', ['scheduled', 'ongoing'])
+            ->where(function ($query) use ($startDate, $endDate) {
+                 $query->where(function ($q) use ($startDate, $endDate) {
+                    $q->whereNotNull('end_date')
+                      ->where('date', '<', $endDate)
+                      ->where('end_date', '>', $startDate);
+                })->orWhere(function ($q) use ($endDate) {
+                    $q->whereNull('end_date')
+                      ->where('date', '<=', $endDate);
+                });
+            })
+            ->exists();
+
+        if ($hasMaintenanceConflict) {
+            return 'maintenance';
+        }
+
+        // 2. Check Bookings
+        $hasBookingConflict = $this->bookings()
+            ->where('status', '!=', 'cancelled')
+            ->where(function ($query) use ($startDate, $endDate) {
+                // Check overlap: Existing Start < Requested End AND Existing End (+30min) > Requested Start
+                $query->where('start_date', '<', $endDate)
+                      ->whereRaw('DATE_ADD(end_date, INTERVAL 30 MINUTE) > ?', [$startDate]);
+            })
+            ->exists();
+
+        if ($hasBookingConflict) {
+            return 'booked';
+        }
+
+        return 'available';
+    }
 }

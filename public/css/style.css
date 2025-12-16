@@ -10510,6 +10510,7 @@ Version      : 1.0
   background: url("../images/feature-bg-01.png") no-repeat;
   background-position: bottom;
   padding: 0 0 60px;
+  padding-top: 50px !important;
 }
 @media (max-width: 991.98px) {
   .feature-section {

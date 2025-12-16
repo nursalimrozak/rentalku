@@ -32,16 +32,7 @@
 		<div class="container">	  
 			<div class="search-box-banner">
 				<form action="{{ route('cars.index') }}">
-					<ul class="align-items-center">
-						<li class="column-group-main">
-							<div class="input-block">
-								<label>Pickup Location</label>												
-								<div class="group-img">
-									<input type="text" class="form-control" placeholder="Enter City, Airport, or Address">
-									<span><i class="feather-map-pin"></i></span>
-								</div>
-							</div>
-						</li>
+					<ul class="align-items-center justify-content-center">
 						<li class="column-group-main">						
 							<div class="input-block">																	
 								<label>Pickup Date</label>
@@ -49,13 +40,13 @@
 							<div class="input-block-wrapp">
 								<div class="input-block date-widget">												
 									<div class="group-img">
-									<input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
+									<input type="text" name="pickup_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="{{ request('pickup_date') }}">
 									<span><i class="feather-calendar"></i></span>
 									</div>
 								</div>
 								<div class="input-block time-widge">											
 									<div class="group-img">
-									<input type="text" class="form-control timepicker" placeholder="11:00 AM">
+									<input type="text" name="pickup_time" class="form-control timepicker" placeholder="11:00 AM" value="{{ request('pickup_time') }}">
 									<span><i class="feather-clock"></i></span>
 									</div>
 								</div>
@@ -68,13 +59,13 @@
 							<div class="input-block-wrapp">
 								<div class="input-block date-widge">												
 									<div class="group-img">
-									<input type="text" class="form-control datetimepicker" placeholder="04/11/2023">
+									<input type="text" name="return_date" class="form-control datetimepicker" placeholder="dd/mm/yyyy" value="{{ request('return_date') }}">
 									<span><i class="feather-calendar"></i></span>
 									</div>
 								</div>
 								<div class="input-block time-widge">											
 									<div class="group-img">
-									<input type="text" class="form-control timepicker" placeholder="11:00 AM">
+									<input type="text" name="return_time" class="form-control timepicker" placeholder="11:00 AM" value="{{ request('return_time') }}">
 									<span><i class="feather-clock"></i></span>
 									</div>
 								</div>
@@ -203,40 +194,14 @@
 											<div class="col-md-12">
 												<div id="checkBoxes1">
 													<div class="selectBox-cont">
+														@forelse($brands as $brand)
 														<label class="custom_check w-100">
-															<input type="checkbox" name="username">
-															<span class="checkmark"></span>  Tesla
+															<input type="checkbox" name="brand[]" value="{{ $brand }}" {{ in_array($brand, (array)request('brand', [])) ? 'checked' : '' }} onchange="this.form.submit()">
+															<span class="checkmark"></span> {{ $brand }}
 														</label>
-														<label class="custom_check w-100">
-															<input type="checkbox" name="username">
-															<span class="checkmark"></span>  Ford
-														</label>
-														<label class="custom_check w-100">
-															<input type="checkbox" name="username">
-															<span class="checkmark"></span>  Mercediz Benz
-														</label>
-														<label class="custom_check w-100">
-															<input type="checkbox" name="username">
-															<span class="checkmark"></span> Audi
-														</label>
-														<!-- View All -->
-														<div class="view-content">
-														<div class="viewall-One">	
-															<label class="custom_check w-100">
-																<input type="checkbox" name="username">
-																<span class="checkmark"></span> Kia
-															</label>
-															<label class="custom_check w-100">
-																<input type="checkbox" name="username">
-																<span class="checkmark"></span> Honda
-															</label>
-															<label class="custom_check w-100">
-																<input type="checkbox" name="username">
-																<span class="checkmark"></span> Toyota
-															</label>
-														</div>
-														</div>
-														<!-- /View All -->
+														@empty
+														<p class="text-muted">No brands available</p>
+														@endforelse
 													</div>
 												</div>
 											</div>
@@ -258,6 +223,28 @@
 						<div class="col-xxl-4 col-lg-6 col-md-6 col-12">
 							<div class="listing-item">										
 								<div class="listing-img">
+                                    @if($pickupDate && $returnDate)
+                                        @php
+                                            $status = $car->getAvailabilityStatus($pickupDate, $returnDate);
+                                            $badgeClass = '';
+                                            $badgeText = '';
+                                            if($status === 'available') {
+                                                $badgeClass = 'bg-success';
+                                                $badgeText = 'Tersedia';
+                                            } elseif($status === 'maintenance') {
+                                                $badgeClass = 'bg-warning text-dark';
+                                                $badgeText = 'Maintenance';
+                                            } elseif($status === 'booked') {
+                                                $badgeClass = 'bg-danger';
+                                                $badgeText = 'Tidak Tersedia';
+                                            }
+                                        @endphp
+                                        @if($badgeText)
+                                            <div class="position-absolute top-0 start-0 m-3" style="z-index: 100;">
+                                                <span class="badge {{ $badgeClass }} p-2">{{ $badgeText }}</span>
+                                            </div>
+                                        @endif
+                                    @endif
 									<a href="{{ route('car.details', $car->id) }}">
 										@if($car->photo)
 											<img src="{{ asset($car->photo) }}" class="img-fluid" alt="{{ $car->name }}" style="height: 250px; object-fit: cover; width: 100%;">
