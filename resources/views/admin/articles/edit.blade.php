@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+@endpush
+
 <div class="content">
     <div class="page-header">
         <h4>Edit Article</h4>
@@ -21,7 +25,7 @@
                 </div>
                 <div class="mb-3">
                     <label>Content</label>
-                    <textarea name="content" class="form-control" rows="8" required>{{ $article->content }}</textarea>
+                    <textarea name="content" id="summernote" class="form-control" rows="8" required>{{ $article->content }}</textarea>
                 </div>
                 <div class="mb-3">
                     <label>Image</label>
@@ -39,4 +43,26 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#summernote').summernote({
+            placeholder: 'Write your article content here...',
+            tabsize: 2,
+            height: 300,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        });
+    });
+</script>
+@endpush
 @endsection

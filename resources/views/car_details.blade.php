@@ -2,6 +2,37 @@
 @section('header-class', 'header-one')
 
 @section('content')
+    @push('styles')
+    <style>
+        /* Main Slider Image Fix */
+        .detail-bigimg .product-img img {
+            width: 100%;
+            height: 450px; /* Fixed height for consistency */
+            object-fit: cover; /* Crop to fit without distortion */
+            border-radius: 6px;
+        }
+
+        /* Thumbnail Slider Image Fix */
+        .slider-nav-thumbnails .slick-slide {
+            padding: 0 5px; /* Spacing between thumbnails */
+        }
+
+        .slider-nav-thumbnails .slick-slide img {
+            width: 100%;
+            height: 100px; /* Fixed height for thumbnails */
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .slider-nav-thumbnails .slick-slide.slick-current img {
+            opacity: 1;
+            border: 2px solid #FF9F00; /* Active highlight */
+        }
+    </style>
+    @endpush
     <!-- Breadscrumb Section -->
     <div class="breadcrumb-bar">
         <div class="container">

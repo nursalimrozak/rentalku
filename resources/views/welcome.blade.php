@@ -547,7 +547,7 @@
 				</div>
 
 				<div class="view-all-btn text-center aos" data-aos="fade-down">
-					<a href="blog-grid.html" class="btn btn-secondary d-inline-flex align-center">View More<i class="bi bi-arrow-right ms-1"></i></a>
+					<a href="{{ route('public.articles.index') }}" class="btn btn-secondary d-inline-flex align-center">View More<i class="bi bi-arrow-right ms-1"></i></a>
 				</div>	
 
 			</div>
