@@ -69,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('articles', App\Http\Controllers\Admin\ArticleController::class);
         Route::resource('rental-communities', App\Http\Controllers\Admin\RentalCommunityController::class);
         Route::resource('rental-steps', App\Http\Controllers\Admin\RentalStepController::class);
+        Route::resource('policies', App\Http\Controllers\Admin\PolicyController::class);
         
         // Settings
         Route::get('/settings', [App\Http\Controllers\Admin\SettingController::class, 'index'])->name('settings.index');
@@ -83,3 +84,5 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/list-artikel', [App\Http\Controllers\BlogController::class, 'index'])->name('public.articles.index');
 Route::get('/list-artikel/{article:slug}', [App\Http\Controllers\BlogController::class, 'show'])->name('public.articles.show');
+
+Route::get('/policy/{policy:slug}', [App\Http\Controllers\CarController::class, 'policyShow'])->name('public.policy.show');

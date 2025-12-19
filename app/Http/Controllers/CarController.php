@@ -57,8 +57,14 @@ class CarController extends Controller
         $returnDateStr = $returnDate ? $returnDate->format('Y-m-d') : null;
 
         $faqs = \App\Models\Faq::all();
+        $policies = \App\Models\Policy::all();
 
-        return view('car_details', compact('car', 'pickupDateStr', 'returnDateStr', 'faqs'));
+        return view('car_details', compact('car', 'pickupDateStr', 'returnDateStr', 'faqs', 'policies'));
+    }
+
+    public function policyShow(\App\Models\Policy $policy)
+    {
+        return view('policy_details', compact('policy'));
     }
 
 }

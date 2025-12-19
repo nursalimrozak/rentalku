@@ -31,6 +31,71 @@
             opacity: 1;
             border: 2px solid #FF9F00; /* Active highlight */
         }
+
+        /* Related Cars Slider Arrow Fix */
+        .related-car-slider .slick-prev, .related-car-slider .slick-next {
+            z-index: 1;
+            width: 40px;
+            height: 40px;
+            background: #FF9F00;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .related-car-slider .slick-prev:hover, .related-car-slider .slick-next:hover {
+            background: #000;
+        }
+
+        .related-car-slider .slick-prev {
+            left: -20px;
+        }
+
+        .related-car-slider .slick-next {
+            right: -20px;
+        }
+
+        .related-car-slider .slick-prev:before, .related-car-slider .slick-next:before {
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .related-car-slider .slick-prev:before {
+            content: "\f060";
+        }
+
+        .related-car-slider .slick-next:before {
+            content: "\f061";
+        }
+
+        @media (max-width: 768px) {
+            .related-car-slider .slick-prev {
+                left: 0;
+            }
+            .related-car-slider .slick-next {
+                right: 0;
+            }
+        }
+
+        .related-car-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .related-car-nav .slick-arrow {
+            position: relative;
+            top: auto;
+            left: auto;
+            right: auto;
+            transform: none;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
     @endpush
     <!-- Breadscrumb Section -->
@@ -276,20 +341,15 @@
                             <h4>Policies</h4>
                         </div>
                         <div class="policy-list">
-                            <div class="policy-item">
-                                <div class="policy-info">
-                                    <h6>Cancellation Charges</h6>
-                                    <p>Cancellation charges will be applied as per the policy</p>
+                            @foreach($policies as $policy)
+                                <div class="policy-item">
+                                    <div class="policy-info">
+                                        <h6>{{ $policy->title }}</h6>
+                                        <p>{{ $policy->summary }}</p>
+                                    </div>
+                                    <a href="{{ route('public.policy.show', $policy->slug) }}">{{ $policy->link_text }}</a>
                                 </div>
-                                <a href="#">Know More</a>
-                            </div>
-                            <div class="policy-item">
-                                <div class="policy-info">
-                                    <h6>Policy</h6>
-                                    <p>I hereby agree to the terms and conditions of the Lease Agreement with Host</p>
-                                </div>
-                                <a href="#">View Details</a>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                     <!-- /Policies -->
@@ -549,10 +609,11 @@
             <div class="row">               
                 <div class="col-md-12">
                     <div class="details-car-grid">
-                        <div class="details-slider-heading">
+                        <div class="details-slider-heading text-center">
                             <h3>You May be Interested in</h3>
+                            <div class="related-car-nav"></div>
                         </div>
-                        <div class="owl-carousel rental-deal-slider details-car owl-theme">
+                        <div class="slider related-car-slider">
                             <!-- Static related cars for now, can be made dynamic later -->
                             @foreach(\App\Models\Car::where('id', '!=', $car->id)->limit(6)->get() as $relatedCar)
                                 <div class="rental-car-item">
@@ -611,8 +672,36 @@
 <script>
     $(document).ready(function() {
         const checkBtn = $('#check-voucher-btn');
-        const voucherInput = $('#voucher_code');
         const messageSpan = $('#voucher-message');
+
+        $('.related-car-slider').slick({
+            infinite: true,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            arrows: true,
+            dots: false,
+            appendArrows: '.related-car-nav',
+            responsive: [
+                {
+                    breakpoint: 1024,
+                    settings: {
+                        slidesToShow: 3,
+                    }
+                },
+                {
+                    breakpoint: 768,
+                    settings: {
+                        slidesToShow: 2,
+                    }
+                },
+                {
+                    breakpoint: 480,
+                    settings: {
+                        slidesToShow: 1,
+                    }
+                }
+            ]
+        });
         const bookBtn = $('button[type="submit"]'); // Assuming the submit button is the only one or identifiable
         
         // Disable book button initially if voucher has value but not verified? 

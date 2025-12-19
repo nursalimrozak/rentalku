@@ -5,6 +5,54 @@
 @push('styles')
 	<!-- Rangeslider CSS -->
 	<link rel="stylesheet" href="{{ asset('css/ion.rangeSlider.min.css') }}">
+    <style>
+        .section-search.page-search {
+            position: relative;
+            z-index: 900;
+            margin-top: -75px !important;
+            margin-bottom: 40px !important;
+        }
+        
+        @media (min-width: 992px) {
+            .section-search.page-search.sticky-filter {
+                position: fixed;
+                top: 85px; /* Sesuaikan dengan tinggi header */
+                left: 0;
+                right: 0;
+                width: 100%;
+                z-index: 999; /* Di bawah navbar (biasanya 1000) tapi di atas konten */
+                margin-top: 0 !important;
+                background: rgba(255, 255, 255, 0.98);
+                padding: 10px 0;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                transition: all 0.3s ease;
+            }
+            .section-search.page-search.sticky-filter .container {
+                max-width: 1140px;
+            }
+            .section-search.page-search.sticky-filter .search-box-banner {
+                margin: 0 !important;
+                padding: 10px 15px !important;
+                box-shadow: none !important;
+            }
+        }
+
+        .bootstrap-datetimepicker-widget, 
+        .datepicker.dropdown-menu {
+            z-index: 999999 !important;
+        }
+
+        .search-box-banner {
+            z-index: 901 !important;
+            overflow: visible !important;
+            box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Adjustment for column spacing */
+        .search-box-banner .column-group-main {
+            padding: 0 15px !important;
+        }
+    </style>
 @endpush
 
 @section('content')
@@ -344,10 +392,17 @@
 	
 	<script>
 		$(window).scroll(function () {
-			var sticky = $('.header-four'),
+			var stickyHeader = $('.header-four'),
+                stickyFilter = $('.section-search.page-search'),
 				scroll = $(window).scrollTop();
-			if (scroll >= 150) sticky.addClass('header-fixed');
-			else sticky.removeClass('header-fixed');
+            
+			if (scroll >= 150) {
+                stickyHeader.addClass('header-fixed');
+                stickyFilter.addClass('sticky-filter');
+            } else {
+                stickyHeader.removeClass('header-fixed');
+                stickyFilter.removeClass('sticky-filter');
+            }
 		});
 	</script>
 @endpush

@@ -223,6 +223,11 @@
 										<i class="ti ti-user-bolt"></i><span>Drivers</span>
 									</a>
 								</li>
+								<li class="{{ request()->routeIs('admin.policies.*') ? 'active' : '' }}">
+									<a href="{{ route('admin.policies.index') }}">
+										<i class="ti ti-file-shield"></i><span>Policies</span>
+									</a>
+								</li>
 								<li>
 									<a href="locations.html">
 										<i class="ti ti-map-pin"></i><span>Locations</span>
