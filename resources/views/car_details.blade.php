@@ -256,39 +256,17 @@
                             <h4>FAQ’s</h4>
                         </div>
                         <div class="faq-info">
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqOne" aria-expanded="false">How old do I need to be to rent a car?</a>
-                                </h4>
-                                <div id="faqOne" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
+                            @foreach($faqs as $faq)
+                                <div class="faq-card">
+                                    <h4 class="faq-title">
+                                        <a class="collapsed" data-bs-toggle="collapse" href="#faq{{ $faq->id }}" aria-expanded="false">{{ $faq->question }}</a>
+                                    </h4>
+                                    <div id="faq{{ $faq->id }}" class="card-collapse collapse">
+                                        <p>{{ $faq->answer }}</p>
+                                    </div>
                                 </div>
-                            </div>	
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqTwo" aria-expanded="false">What documents do I need to rent a car?</a>
-                                </h4>
-                                <div id="faqTwo" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqThree" aria-expanded="false">What types of vehicles are available for rent?</a>
-                                </h4>
-                                <div id="faqThree" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>	
-                            <div class="faq-card">
-                                <h4 class="faq-title">
-                                    <a class="collapsed" data-bs-toggle="collapse" href="#faqFour" aria-expanded="false">Can I rent a car with a debit card?</a>
-                                </h4>
-                                <div id="faqFour" class="card-collapse collapse">
-                                    <p>We offer a diverse fleet of vehicles to suit every need, including compact cars, sedans, SUVs and luxury vehicles. You can browse our selection online or contact us for assistance in choosing the right vehicle for you</p>
-                                </div>
-                            </div>													
-                        </div>	
+                            @endforeach
+                        </div>
                     </div>
                     <!-- /FAQ -->	
 

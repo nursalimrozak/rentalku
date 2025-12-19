@@ -56,7 +56,9 @@ class CarController extends Controller
         $pickupDateStr = $pickupDate ? $pickupDate->format('Y-m-d') : null;
         $returnDateStr = $returnDate ? $returnDate->format('Y-m-d') : null;
 
-        return view('car_details', compact('car', 'pickupDateStr', 'returnDateStr'));
+        $faqs = \App\Models\Faq::all();
+
+        return view('car_details', compact('car', 'pickupDateStr', 'returnDateStr', 'faqs'));
     }
 
 }
