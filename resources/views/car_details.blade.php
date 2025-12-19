@@ -172,7 +172,7 @@
                         <div class="card-body">
                         <div class="lisiting-featues">
                             <div class="row">
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-car-side fa-2x text-primary"></i>
                                     </div>
@@ -181,7 +181,7 @@
                                         <h6>{{ $car->type }}</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-tag fa-2x text-primary"></i>
                                     </div>
@@ -190,7 +190,7 @@
                                         <h6>{{ $car->brand }}</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-gears fa-2x text-primary"></i>
                                     </div>
@@ -199,7 +199,7 @@
                                         <h6>{{ $car->transmission }}</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-gas-pump fa-2x text-primary"></i>
                                     </div>
@@ -208,7 +208,7 @@
                                         <h6>{{ $car->fuel_type }}</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-regular fa-calendar-days fa-2x text-primary"></i>
                                     </div>
@@ -217,7 +217,7 @@
                                         <h6>{{ $car->year }}</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-door-open fa-2x text-primary"></i>
                                     </div>
@@ -226,7 +226,7 @@
                                         <h6>{{ $car->doors }} Doors</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-users fa-2x text-primary"></i>
                                     </div>
@@ -235,7 +235,7 @@
                                         <h6>{{ $car->seating_capacity }} Persons</h6>
                                     </div>
                                 </div>
-                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-sm-6">
+                                <div class="featureslist d-flex align-items-center col-xl-3 col-md-4 col-6">
                                     <div class="feature-img">
                                         <i class="fa-solid fa-id-card fa-2x text-primary"></i>
                                     </div>

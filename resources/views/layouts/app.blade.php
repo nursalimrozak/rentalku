@@ -49,15 +49,36 @@
 	<!-- Main CSS -->
 	<link rel="stylesheet" href="{{ asset('css/style.css') }}">
     @stack('styles')
-	<!-- Custom CSS -->
+    <!-- Custom CSS -->
     <style>
         .app-logo {
             max-width: 180px;
             height: auto;
+            object-fit: contain;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 991.98px) {
             .app-logo {
                 max-width: 120px;
+            }
+        }
+        @media (max-width: 575.98px) {
+            .app-logo {
+                max-width: 100px;
+                max-height: 40px;
+            }
+        }
+        .header.header-two .logo .white-logo {
+            display: none;
+        }
+        .header.header-two .logo .dark-logo {
+            display: block;
+        }
+        @media (max-width: 991.98px) {
+            .header .header-navbar-rht {
+                display: none !important;
+            }
+            .main-wrapper:not(.login-body) {
+                padding-top: 60px !important;
             }
         }
     </style>
@@ -93,9 +114,9 @@
 						</a>
 						<a href="{{ route('home') }}" class="navbar-brand logo-small">
                             @if(isset($appSettings['app_favicon']))
-							    <img src="{{ asset('storage/' . $appSettings['app_favicon']) }}" class="img-fluid" alt="Logo">
+							    <img src="{{ asset('storage/' . $appSettings['app_favicon']) }}" class="img-fluid app-logo" alt="Logo">
                             @else
-							    <img src="{{ asset('images/logo-small.png') }}" class="img-fluid" alt="Logo">
+							    <img src="{{ asset('images/logo-small.png') }}" class="img-fluid app-logo" alt="Logo">
                             @endif
 						</a>					
 					</div>
@@ -126,6 +147,14 @@
 							<li>
 								<a href="contact-us.html">Kontak</a>
 							</li>
+							@guest
+								<li class="login-link">
+									<a href="{{ route('login') }}">Masuk</a>
+								</li>
+								<li class="login-link">
+									<a href="{{ route('register') }}">Daftar</a>
+								</li>
+							@endguest
 						</ul>
 					</div>
 					<ul class="nav header-navbar-rht">
